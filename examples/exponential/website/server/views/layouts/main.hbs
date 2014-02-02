@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    <!-- TODO: Dynamically update the title -->
+    <title>Exponential UnityJS: {{title}}</title>
+
+    <!-- build:css(client/bower_components) /styles/bootstrap-plus.css -->
+    <link rel="stylesheet" href="/bootswatch/spacelab/bootstrap.min.css">
+    <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+    <!-- endbuild -->
+
+    <!-- build:css(client) /styles/website.css -->
+    <link rel="stylesheet" href="/styles/app.css">
+    <!-- endbuild -->
+
+    <!-- Shared styles across Express pages and Angular apps. -->
+    <!-- build:css(client) /styles/common.css -->
+    <link rel="stylesheet" href="/styles/common.css">
+    <!-- endbuild -->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+        .snippet {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    {{> navbar}}
+
+    <!-- wrapper -->
+    <div class="container exp-container">
+        <!-- content -->
+        {{{body}}}
+        <!-- /content -->
+        <hr class="featurette-divider">
+        {{> footer}}
+    </div>
+    <!-- /wrapper -->
+
+    <!-- build:js(client/bower_components) /scripts/website-dependencies.js -->
+    <script type="text/javascript" src="/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- endbuild -->
+
+    <!-- @ifdef development-only -->
+    <script type="text/javascript" src="http://localhost:35729/livereload.js"></script>
+    <!-- @endif -->
+
+    <!-- Google Analytics -->
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', '<%= mdf.project.google.trackingId %>', '<%= mdf.project.google.website %>');
+        ga('require', 'linkid', 'linkid.js');
+        ga('send', 'pageview');
+    </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+div.exp-blog-read-all-post {
+    margin-bottom: 21px;
+    padding: 11px;
+}
+
+h2.exp-blog-read-all-title,
+h3.exp-blog-read-all-subtitle {
+    margin: 0;
+    padding: 0;
+}
+
+a.exp-blog-read-all-title,
+a.exp-blog-read-all-subtitle {
+    display: block;
+}
+a.exp-blog-read-all-title {
+    color: #333;
+    padding-bottom: 13px;
+}
+
+a.exp-blog-read-all-title:hover,
+a.exp-blog-read-all-subtitle:hover {
+    text-decoration: none;
+}

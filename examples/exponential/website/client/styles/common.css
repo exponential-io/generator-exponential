@@ -1,0 +1,84 @@
+body {
+    /* Adjust for the height of the navbar */
+    padding-top: 52px;
+}
+
+div.exp-container {
+    margin-top: 21px;
+}
+
+div.exp-video {
+    margin-bottom: 21px;
+}
+
+img.source {
+    border: 1px solid #eee;
+    -webkit-box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+/*
+    This is a temp file that I created so that the server-only and client-only
+    html files are in perfect sync.
+ */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none;
+}
+
+/* The 'icon-' styles are used on login and signup pages (Express and Angular */
+.icon-twitter {
+    color:#00A7E7;
+}
+
+.icon-facebook-sign {
+    color:#3662A0;
+}
+
+.icon-google-plus-sign {
+    color: #D74634;
+}
+
+/* Login form */
+.form-login {
+    margin: 0 auto;
+    max-width: 410px;
+    padding: 15px;
+    border: solid #dfdfdf 1px;
+    border-radius: 4px;
+}
+.form-login .form-login-heading, .form-login .checkbox {
+    margin-bottom: 10px;
+}
+.form-login .checkbox {
+    font-weight: normal;
+}
+.form-login .form-control {
+    -moz-box-sizing: border-box;
+    font-size: 16px;
+    height: auto;
+    padding: 10px;
+    position: relative;
+}
+.form-login .form-control:focus {
+    z-index: 2;
+}
+.form-login input[type="text"] {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-bottom: -1px;
+}
+.form-login input[type="password"] {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    margin-bottom: 10px;
+}
+/* /Login form */
+
+/* Edit vs details form */
+.e-input-details-mode {
+    background-color: #fff !important;
+    border: 1px solid #fff;
+    -webkit-box-shadow: inset 0 0px 0px #fff;
+    box-shadow: inset 0 0px 0px #fff;
+}
+/* /Edit vs details form */
