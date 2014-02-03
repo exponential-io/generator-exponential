@@ -1,21 +1,21 @@
-'use strict';
-
 /**
  * Create an Angular service.
  *
- * @copyright Copyright 2013 Exponential.io. All rights reserved.
+ * @copyright Copyright 2014 Exponential.io. All rights reserved.
  * @author Akbar S. Ahmed <akbar@exponential.io>
  */
+'use strict';
 
-var util            = require('util'),
-    _               = require('lodash'),
-    yeoman          = require('yeoman-generator'),
-    _eArguments     = require('../util/arguments'),
-    _eOptions       = require('../util/options'),
-    _eDir           = require('../util/directories')(),
-    _eInject        = require('../util/inject'),
-    _eGeneratorBase = require('../util/generator-base'),
-    _eLoadMdf       = require('../util/load-mdf');
+
+var util             = require('util'),
+    _                = require('lodash'),
+    _eInject         = require('../util/inject'),
+    _eGeneratorBase  = require('../util/generator-base'),
+    _eLoadMdf        = require('../util/load-mdf'),
+    _eMkDirs         = require('../util/mkdir'),
+    rimraf           = require('rimraf'),
+    _eDownloadSource = require('../util/download-source'),
+    _eConfig         = require('../util/config');
 
 
 var AngularServiceGenerator = module.exports = function AngularServiceGenerator() {
@@ -25,45 +25,51 @@ var AngularServiceGenerator = module.exports = function AngularServiceGenerator(
         app: false,
         module: true
     }]);
+    _eConfig.apply(this);
 };
 
 util.inherits(AngularServiceGenerator, _eGeneratorBase);
 
-/**
- * Create the Angular files - Service
- */
+/** Download the source files */
+AngularServiceGenerator.prototype.generateSrc = function generateSrc() {
+    _eDownloadSource.apply(this, [{
+        _eMkDirs: _eMkDirs,
+        generator: 'angularService'
+    }]);
+};
+
+/** Create the Angular files - Service */
 AngularServiceGenerator.prototype.angularServiceFiles = function angularServiceFiles() {
-    // Generator template base directory
-    var genBase = _eDir.generator.templates;
+    var appNameLp    = this.mdf.app.name.lowerPlural,
+        moduleNameLp = this.mdf.module.name.lowerPlural;
 
-    // Directory of the template used by the application defined in the MDF
-    var genTemplate      = genBase + this.mdf.module.angular.template + '/',
-        genAngularModule = genTemplate + 'angular/',
-        genJs            = genAngularModule + 'js/',
-        genServices      = genJs + 'services/';
+    // Generator paths
+    var genServices = [
+        this._eDir.download.src + 'client/',
+        appNameLp + '/' + 'js/services/' + moduleNameLp + '/',
+        moduleNameLp + '-srv.js'
+    ].join('');
 
-    // Relative project paths
-    var projectAngularApp    = 'client/' + this.mdf.app.name.lowerPlural + '/',
-        projectJs            = projectAngularApp + 'js/',
-        projectServices      = projectJs + 'services/',
-        moduleServices       = projectServices + this.mdf.module.name.lowerPlural + '/';
+    // Project paths
+    var moduleServices = [
+        this._eDir.project.client,
+        appNameLp + '/' + 'js/services/' + moduleNameLp + '/',
+        moduleNameLp + '-srv.js'
+    ].join('');
 
     // Services
-    this.template(genServices + 'services-srv.js', moduleServices + this.mdf.module.name.lowerPlural + '-srv.js');
+    this.copy(genServices, moduleServices);
 
-    /*
-        Insert references to each router in the index.html file.
+    // Insert references to each router in the index.html file.
+    // The 'js/' prefix to each path and the '.js' file extension are
+    // automatically added by the inject method.
 
-        The 'js/' prefix to each path and the '.js' file extension are
-        automatically added by the inject method.
-     */
-
-    var servicesJsDir = 'services/' + this.mdf.module.name.lowerPlural + '/';
+    var servicesJsDir = 'services/' + moduleNameLp + '/';
     var jsFiles = [
-        servicesJsDir + this.mdf.module.name.lowerPlural + '-srv'
+        servicesJsDir + moduleNameLp + '-srv'
     ];
 
-    var indexHtml = _eDir.project.client + this.mdf.app.name.lowerPlural + '/index.html';
+    var indexHtml = this._eDir.project.client + appNameLp + '/index.html';
 
     jsFiles.forEach(function(jsFile) {
         _eInject({
@@ -74,5 +80,14 @@ AngularServiceGenerator.prototype.angularServiceFiles = function angularServiceF
             ],
             appendComma: false
         });
+    });
+};
+
+/** Cleanup downloadDir */
+AngularServiceGenerator.prototype.cleanupDownloadDir = function cleanupDownloadDir() {
+    rimraf(this._eDir.download.root, function(err) {
+        if (err) {
+            console.log(err);
+        }
     });
 };
