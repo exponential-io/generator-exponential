@@ -1,21 +1,21 @@
-'use strict';
-
 /**
  * Create an Angular router.
  *
- * @copyright Copyright 2013 Exponential.io. All rights reserved.
+ * @copyright Copyright 2014 Exponential.io. All rights reserved.
  * @author Akbar S. Ahmed <akbar@exponential.io>
  */
+'use strict';
+
 
 var util            = require('util'),
     _               = require('lodash'),
-    yeoman          = require('yeoman-generator'),
-    _eArguments     = require('../util/arguments'),
-    _eOptions       = require('../util/options'),
-    _eDir           = require('../util/directories')(),
     _eInject        = require('../util/inject'),
     _eGeneratorBase = require('../util/generator-base'),
-    _eLoadMdf       = require('../util/load-mdf');
+    _eLoadMdf       = require('../util/load-mdf'),
+    _eMkDirs        = require('../util/mkdir'),
+    rimraf           = require('rimraf'),
+    _eDownloadSource = require('../util/download-source'),
+    _eConfig         = require('../util/config');
 
 
 var AngularRouterGenerator = module.exports = function AngularRouterGenerator() {
@@ -25,43 +25,45 @@ var AngularRouterGenerator = module.exports = function AngularRouterGenerator() 
         app: false,
         module: true
     }]);
+    _eConfig.apply(this);
 };
 
 util.inherits(AngularRouterGenerator, _eGeneratorBase);
 
-/**
- * Create the Angular files - Routes
- */
+/** Download the source files */
+AngularRouterGenerator.prototype.generateSrc = function generateSrc() {
+    _eDownloadSource.apply(this, [{
+        _eMkDirs: _eMkDirs,
+        generator: 'angularRouter'
+    }]);
+};
+
+/** Create the Angular files - Routes */
 AngularRouterGenerator.prototype.angularServiceFiles = function angularRouterFiles() {
-    // Generator template base directory
-    var genBase = _eDir.generator.templates;
+    var appNameLp    = this.mdf.app.name.lowerPlural,
+        moduleNameLp = this.mdf.module.name.lowerPlural;
 
-    // Directory of the template used by the application defined in the MDF
-    var genTemplate      = genBase + this.mdf.module.angular.template + '/',
-        genAngularModule = genTemplate + 'angular/',
-        genJs            = genAngularModule + 'js/',
-        genRouters       = genJs + 'routers/';
+    // Generator paths
+    var genRouters = this._eDir.download.src + 'client/' + appNameLp + '/js/routers/',
+        genRouter  = genRouters + moduleNameLp + '.js';
 
-    // Relative project paths
-    var projectRouters = 'client/' + this.mdf.app.urlBase + '/js/routers/',
-        moduleRouter   = projectRouters + this.mdf.module.name.lowerPlural + '.js';
+    // Project paths
+    var projectRouters = this._eDir.project.client + appNameLp + '/js/routers/',
+        moduleRouter   = projectRouters + moduleNameLp + '.js';
 
     // Routers
-    this.template(genRouters + 'routes.js', moduleRouter);
+    this.copy(genRouter, moduleRouter);
 
-    /*
-        Insert references to each router in the index.html file.
-
-        The 'js/' prefix to each path and the '.js' file extension are
-        automatically added by the inject method.
-     */
+    // Insert references to each router in the index.html file.
+    // The 'js/' prefix to each path and the '.js' file extension are
+    // automatically added by the inject method.
 
     var routersJsDir = 'routers/';
     var jsFiles = [
-        routersJsDir + this.mdf.module.name.lowerPlural
+        routersJsDir + moduleNameLp
     ];
 
-    var indexHtml = _eDir.project.client + this.mdf.app.urlBase + '/index.html';
+    var indexHtml = this._eDir.project.client + appNameLp + '/index.html';
 
     jsFiles.forEach(function(jsFile) {
         _eInject({
@@ -74,11 +76,9 @@ AngularRouterGenerator.prototype.angularServiceFiles = function angularRouterFil
         });
     });
 
-    /*
-        Insert the module name into the app.js file so that the module's routes
-        are loaded.
-     */
-    var appJs = _eDir.project.client + this.mdf.app.name.lowerPlural + '/js/app.js';
+    // Insert the module name into the app.js file so that the module's routes
+    // are loaded.
+    var appJs = this._eDir.project.client + appNameLp + '/js/app.js';
 
     _eInject({
         targetFile: appJs,
@@ -89,7 +89,7 @@ AngularRouterGenerator.prototype.angularServiceFiles = function angularRouterFil
         appendComma: true
     });
 
-    var navbarHtml = _eDir.project.client + this.mdf.app.urlBase + '/views/common/navbar.html';
+    var navbarHtml = this._eDir.project.client + appNameLp + '/views/common/navbar.html';
 
     // Insert the module into the navbar
     if (this.mdf.module.navbar.display) {
@@ -102,30 +102,13 @@ AngularRouterGenerator.prototype.angularServiceFiles = function angularRouterFil
             appendComma: false
         });
     }
+};
 
-    // Directives
-    //this.copy(genDirectives + '', projectDirectives + '');
-
-    // Filters
-    //this.copy(genFilters + '', projectFilters + '');
-
-    // Models
-    //this.copy(genModels + '', projectModels + '');
-
-    // Routers
-    //this.template(genRouters + 'accounts.js', projectRouters + 'accounts.js');
-
-    // Services
-    //this.template(genServices + 'accounts/accounts-srv.js', projectServices + 'accounts/accounts-srv.js');
-
-    // Views
-    //this.copy(genViews + '', projectViews + '');
-//    this.template(genViewsAccounts + 'login.html',  projectViewsAccounts + 'login.html');
-//    this.template(genViewsAccounts + 'signup.html', projectViewsAccounts + 'signup.html');
-//
-//    this.template(genViewsCommon + '401.html',    projectViewsCommon + '401.html');
-//    this.template(genViewsCommon + '404.html',    projectViewsCommon + '404.html');
-//    this.template(genViewsCommon + 'navbar.html', projectViewsCommon + 'navbar.html');
-//
-//    this.template(genViewsHome + 'main.html', projectViewsHome + 'main.html');
+/** Cleanup downloadDir */
+AngularRouterGenerator.prototype.cleanupDownloadDir = function cleanupDownloadDir() {
+    rimraf(this._eDir.download.root, function(err) {
+        if (err) {
+            console.log(err);
+        }
+    });
 };
