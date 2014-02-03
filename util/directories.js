@@ -54,7 +54,7 @@ module.exports = function() {
         },
         download: {
             root        : projectRoot + '.exponential/download/',
-            projectSkel : projectRoot + '.exponential/download/src/'
+            src         : projectRoot + '.exponential/download/src/'
         },
         website: {
             root: websiteRoot,

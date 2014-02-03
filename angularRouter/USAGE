@@ -1,0 +1,5 @@
+Description:
+    Create an Angular router.
+
+Example:
+    yo exponential:angularRouter --mdf 'crm/companies' [--debug]

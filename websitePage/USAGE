@@ -1,0 +1,5 @@
+Description:
+    Create a web page.
+
+Example:
+    yo exponential:websitePage --mdf 'website/home' [--debug]

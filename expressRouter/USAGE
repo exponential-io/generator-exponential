@@ -1,0 +1,5 @@
+Description:
+    Inject an Express route into a routes file.
+
+Example:
+    yo exponential:expressRouter --mdf 'website/contact' [--debug]

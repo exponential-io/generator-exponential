@@ -1,0 +1,5 @@
+Description:
+    Create an Express/NodeJS API.
+
+Example:
+    yo exponential:api --mdf 'crm/companies'; [--debug]

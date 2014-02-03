@@ -1,0 +1,5 @@
+Description:
+    Create an Express controller.
+
+Example:
+    yo exponential:expressController --mdf 'website/contact' [--debug]

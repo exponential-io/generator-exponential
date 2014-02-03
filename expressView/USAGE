@@ -1,0 +1,5 @@
+Description:
+    Create an Express view.
+
+Example:
+    yo exponential:expressView --mdf 'website/contact' [--debug]

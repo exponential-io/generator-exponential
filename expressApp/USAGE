@@ -1,0 +1,6 @@
+Description:
+    Create a NodeJS website container. An NodeJS website website sets up the
+    core directory structure plus common files, such as favicon.ico.
+
+Example:
+    yo exponential:websiteApp --mdf 'website/app' [--debug]

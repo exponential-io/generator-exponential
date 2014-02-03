@@ -1,11 +1,11 @@
-'use strict';
-
 /**
  * Create Angular application container.
  *
  * @copyright Copyright 2014 Exponential.io. All rights reserved.
  * @author Akbar S. Ahmed <akbar@exponential.io>
  */
+'use strict';
+
 
 var util            = require('util'),
     _               = require('lodash'),
@@ -69,7 +69,7 @@ AngularAppGenerator.prototype.angularDirs = function angularDirs() {
 /** Create the Angular application files */
 AngularAppGenerator.prototype.angularAppFiles = function angularAppFiles() {
     // Generator directory structure: angular-skel
-    var genAngularSkel   = this._eDir.download.projectSkel +
+    var genAngularSkel   = this._eDir.download.src +
             'client/' +
             this.mdf.app.name.lowerPlural +
             '/',

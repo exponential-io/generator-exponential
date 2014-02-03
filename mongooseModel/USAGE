@@ -1,0 +1,5 @@
+Description:
+    Create a Mongoose model.
+
+Example:
+    yo exponential:mongooseModel --mdf 'website/contact' [--debug]
