@@ -9,9 +9,6 @@
 
 var util            = require('util'),
     _               = require('lodash'),
-//    yeoman          = require('yeoman-generator'),
-//    _eArguments     = require('../util/arguments'),
-//    _eOptions       = require('../util/options'),
     _eInject        = require('../util/inject'),
     _eGeneratorBase = require('../util/generator-base'),
     _eLoadMdf       = require('../util/load-mdf'),
@@ -74,7 +71,8 @@ AngularAppGenerator.prototype.angularAppFiles = function angularAppFiles() {
     // Generator directory structure: angular-skel
     var genAngularSkel   = this._eDir.download.projectSkel +
             'client/' +
-            this.mdf.app.name.lowerPlural + '/',
+            this.mdf.app.name.lowerPlural +
+            '/',
         genCss           = genAngularSkel + 'css/',
         genImg           = genAngularSkel + 'img/',
         genJs            = genAngularSkel + 'js/',
@@ -170,9 +168,9 @@ AngularAppGenerator.prototype.routerEntryPoint = function routerEntryPoint() {
 
 /** Cleanup downloadDir */
 AngularAppGenerator.prototype.cleanupDownloadDir = function cleanupDownloadDir() {
-//    rimraf(this._eDir.download.root, function(err) {
-//        if (err) {
-//            console.log(err);
-//        }
-//    });
+    rimraf(this._eDir.download.root, function(err) {
+        if (err) {
+            console.log(err);
+        }
+    });
 };
