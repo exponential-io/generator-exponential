@@ -34,7 +34,8 @@ util.inherits(ExponentialProjectGenerator, _eGeneratorBase);
 /** Generate the project skeleton files */
 ExponentialProjectGenerator.prototype.generateProject = function generateProject() {
     _eDownloadSource.apply(this, [{
-        _eMkDirs: _eMkDirs
+        _eMkDirs: _eMkDirs,
+        generator: 'project'
     }]);
 };
 

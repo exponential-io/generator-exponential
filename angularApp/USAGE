@@ -1,0 +1,7 @@
+Description:
+    Create an Angular application container. An Angular application sets up the
+    core directory structure plus common files, such as Login, Logout and
+    Signup.
+
+Example:
+    yo exponential:angularApp --mdf 'crm/app' [--debug] [--skip-install]
