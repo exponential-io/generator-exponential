@@ -1,21 +1,22 @@
-'use strict';
-
 /**
  * Inject one or more server-side Express routes.
  *
- * @copyright Copyright 2013 Exponential.io. All rights reserved.
+ * @copyright Copyright 2014 Exponential.io. All rights reserved.
  * @author Akbar S. Ahmed <akbar@exponential.io>
  */
+'use strict';
 
-var util            = require('util'),
-    _               = require('lodash'),
-    yeoman          = require('yeoman-generator'),
-    _eArguments     = require('../util/arguments'),
-    _eOptions       = require('../util/options'),
-    _eInject        = require('../util/inject'),
+
+var _                = require('lodash'),
     colors          = require('colors'),
-    _eGeneratorBase = require('../util/generator-base'),
-    _eLoadMdf       = require('../util/load-mdf');
+    util             = require('util'),
+    _eInject         = require('../util/inject'),
+    _eGeneratorBase  = require('../util/generator-base'),
+    _eLoadMdf        = require('../util/load-mdf'),
+    _eMkDirs         = require('../util/mkdir'),
+    rimraf           = require('rimraf'),
+    _eDownloadSource = require('../util/download-source'),
+    _eConfig         = require('../util/config');
 
 
 var expressRouterGenerator = module.exports = function expressRouterGenerator() {
@@ -25,9 +26,18 @@ var expressRouterGenerator = module.exports = function expressRouterGenerator() 
         app: false,
         module: true
     }]);
+    _eConfig.apply(this);
 };
 
 util.inherits(expressRouterGenerator, _eGeneratorBase);
+
+/** Download the source files */
+expressRouterGenerator.prototype.generateSrc = function generateSrc() {
+    _eDownloadSource.apply(this, [{
+        _eMkDirs: _eMkDirs,
+        generator: 'expressRouter'
+    }]);
+};
 
 /** Router */
 expressRouterGenerator.prototype.injectRouter = function injectRouter() {
@@ -132,4 +142,13 @@ expressRouterGenerator.prototype.injectRouter = function injectRouter() {
         });
         console.log('inject route '.green + router);
     }
+};
+
+/** Cleanup downloadDir */
+expressRouterGenerator.prototype.cleanupDownloadDir = function cleanupDownloadDir() {
+    rimraf(this._eDir.download.root, function(err) {
+        if (err) {
+            console.log(err);
+        }
+    });
 };

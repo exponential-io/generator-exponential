@@ -33,6 +33,7 @@
     "postinstall": "node ./util/postinstall"
   },
   "dependencies": {
+    "colors": "~0.6.2",
     "yeoman-generator": "~0.14.0",
     "lodash": "~2.4.1",
     "request": "~2.33.0",
