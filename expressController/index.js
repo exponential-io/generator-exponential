@@ -52,8 +52,6 @@ expressControllerGenerator.prototype.createController = function createControlle
         mdfReadOneCtrl = this.mdf.module.express.readOne.controller,
         mdfUpdateCtrl  = this.mdf.module.express.update.controller;
 
-    var projectCtrlPrefix  = 'server/controllers/';
-
     if (this.mdf.module.express.create.use) {
         var genCreateCtrlFile = [
             this._eDir.download.src, 'server/controllers/', mdfCreateCtrl.path,

@@ -1,24 +1,20 @@
-'use strict';
-
 /**
  * Create a server-side Express view.
  *
- * @copyright Copyright 2013 Exponential.io. All rights reserved.
+ * @copyright Copyright 2014 Exponential.io. All rights reserved.
  * @author Akbar S. Ahmed <akbar@exponential.io>
  */
+'use strict';
 
-var util            = require('util'),
-    _               = require('lodash'),
-    yeoman          = require('yeoman-generator'),
-    _eArguments     = require('../util/arguments'),
-    _eOptions       = require('../util/options'),
-    _eSchema        = require('../util/mongoose-schema'),
-    _eIndexes       = require('../util/mongoose-schema/indexes'),
-    _eCreateHtml    = require('../util/express/views/create'),
-    _eReadAllHtml   = require('../util/express/views/read-all'),
-    _eReadOneHtml   = require('../util/express/views/read-one'),
-    _eGeneratorBase = require('../util/generator-base'),
-    _eLoadMdf       = require('../util/load-mdf');
+
+var util             = require('util'),
+    _                = require('lodash'),
+    _eGeneratorBase  = require('../util/generator-base'),
+    _eLoadMdf        = require('../util/load-mdf'),
+    _eMkDirs         = require('../util/mkdir'),
+    rimraf           = require('rimraf'),
+    _eDownloadSource = require('../util/download-source'),
+    _eConfig         = require('../util/config');
 
 
 var expressViewGenerator = module.exports = function expressViewGenerator() {
@@ -28,9 +24,18 @@ var expressViewGenerator = module.exports = function expressViewGenerator() {
         app: false,
         module: true
     }]);
+    _eConfig.apply(this);
 };
 
 util.inherits(expressViewGenerator, _eGeneratorBase);
+
+/** Download the source files */
+expressViewGenerator.prototype.generateSrc = function generateSrc() {
+    _eDownloadSource.apply(this, [{
+        _eMkDirs: _eMkDirs,
+        generator: 'expressView'
+    }]);
+};
 
 /** Create the directory structure */
 expressViewGenerator.prototype.createDirs = function createDirs() {
@@ -41,53 +46,76 @@ expressViewGenerator.prototype.createDirs = function createDirs() {
 
 /** Create the Express controller(s) */
 expressViewGenerator.prototype.createController = function createController() {
-    // {{template}} is set in the mdf
-    //
-    // {{type}} is set in the generator
-    // type = [ angular, express ]
-    //
-    // Directory structure patter
-    // templates/{{template}}/{{type}}/[controllers, models, views, etc.]
-
-    // Express views templates (source)
-    var genViewsDir = this._eDir.generator.templates + this.mdf.module.express.template + '/express/views/';
-
-    // Express view templates (source)
-    var genCreateView  = genViewsDir + 'create.hbs',
-        genReadAllView = genViewsDir + 'read-all.hbs',
-        genReadOneView = genViewsDir + 'read-one.hbs',
-        genUpdateView  = genViewsDir + 'update.hbs';
-
     // Shortcuts to the MDF view definitions
     var mdfCreateView  = this.mdf.module.express.create.view,
         mdfReadAllView = this.mdf.module.express.readAll.view,
         mdfReadOneView = this.mdf.module.express.readOne.view,
         mdfUpdateView  = this.mdf.module.express.update.view;
 
-    var projectViewPrefix  = 'server/views/';
+//    var projectViewPrefix  = 'server/views/';
 
     if (this.mdf.module.express.create.use) {
-        var projectCreateView = projectViewPrefix + mdfCreateView.path + '/' + mdfCreateView.filename + mdfCreateView.extension;
-        this.createHtml = _eCreateHtml(this.mdf.module.name, this.mdf.module.schema.fields);
+        var genCreateViewFile = [
+            this._eDir.download.src, 'server/views/', mdfCreateView.path,
+            '/', mdfCreateView.filename, mdfCreateView.extension
+        ].join('');
 
-        this.template(genCreateView, projectCreateView, this);
+        var projectCreateViewFile = [
+            this._eDir.project.server, 'views/', mdfCreateView.path,
+            '/', mdfCreateView.filename, mdfCreateView.extension
+        ].join('');
+
+        this.copy(genCreateViewFile, projectCreateViewFile);
     }
 
     if (this.mdf.module.express.readAll.use) {
-        var projectReadAllView = projectViewPrefix + mdfReadAllView.path + '/' + mdfReadAllView.filename + mdfReadAllView.extension;
+        var genReadAllViewFile = [
+            this._eDir.download.src, 'server/views/', mdfReadAllView.path,
+            '/', mdfReadAllView.filename, mdfReadAllView.extension
+        ].join('');
 
-        this.template(genReadAllView, projectReadAllView, this);
+        var projectReadAllViewFile = [
+            this._eDir.project.server, 'views/', mdfReadAllView.path,
+            '/', mdfReadAllView.filename, mdfReadAllView.extension
+        ].join('');
+
+        this.copy(genReadAllViewFile, projectReadAllViewFile);
     }
 
     if (this.mdf.module.express.readOne.use) {
-        var projectReadOneView = projectViewPrefix + mdfReadOneView.path + '/' + mdfReadOneView.filename + mdfReadOneView.extension;
+        var genReadOneFile = [
+            this._eDir.download.src, 'server/views/', mdfReadOneView.path,
+            '/', mdfReadOneView.filename, mdfReadOneView.extension
+        ].join('');
 
-        this.template(genReadOneView, projectReadOneView, this);
+        var projectReadOneViewFile = [
+            this._eDir.project.server, 'views/', mdfReadOneView.path,
+            '/', mdfReadOneView.filename, mdfReadOneView.extension
+        ].join('');
+
+        this.copy(genReadAllOneFile, projectReadOneViewFile);
     }
 
     if (this.mdf.module.express.update.use) {
-        var projectUpdateView = projectViewPrefix + mdfUpdateView.path + '/' + mdfUpdateView.filename + mdfUpdateView.extension;
+        var genUpdateFile = [
+            this._eDir.download.src, 'server/views/', mdfUpdateView.path,
+            '/', mdfUpdateView.filename, mdfUpdateView.extension
+        ].join('');
 
-        this.template(genUpdateView, projectUpdateView, this);
+        var projectUpdateViewFile = [
+            this._eDir.project.server, 'views/', mdfUpdateView.path,
+            '/', mdfUpdateView.filename, mdfUpdateView.extension
+        ].join('');
+
+        this.copy(genUpdateFile, projectUpdateViewFile);
     }
+};
+
+/** Cleanup downloadDir */
+expressViewGenerator.prototype.cleanupDownloadDir = function cleanupDownloadDir() {
+    rimraf(this._eDir.download.root, function(err) {
+        if (err) {
+            console.log(err);
+        }
+    });
 };
