@@ -1,23 +1,20 @@
-'use strict';
-
 /**
  * Create an Angular view.
  *
- * @copyright Copyright 2013 Exponential.io. All rights reserved.
+ * @copyright Copyright 2014 Exponential.io. All rights reserved.
  * @author Akbar S. Ahmed <akbar@exponential.io>
  */
+'use strict';
 
-var util            = require('util'),
-    _               = require('lodash'),
-    yeoman          = require('yeoman-generator'),
-    _eArguments     = require('../util/arguments'),
-    _eOptions       = require('../util/options'),
-    _eDir           = require('../util/directories')(),
-    _eCreateHtml    = require('../util/angular/views/create'),
-    _eReadAllHtml   = require('../util/angular/views/read-all'),
-    _eReadOneHtml   = require('../util/angular/views/read-one'),
-    _eGeneratorBase = require('../util/generator-base'),
-    _eLoadMdf       = require('../util/load-mdf');
+
+var util             = require('util'),
+    _                = require('lodash'),
+    _eGeneratorBase  = require('../util/generator-base'),
+    _eLoadMdf        = require('../util/load-mdf'),
+    _eMkDirs         = require('../util/mkdir'),
+    rimraf           = require('rimraf'),
+    _eDownloadSource = require('../util/download-source'),
+    _eConfig         = require('../util/config');
 
 
 var AngularViewGenerator = module.exports = function AngularViewGenerator() {
@@ -27,67 +24,66 @@ var AngularViewGenerator = module.exports = function AngularViewGenerator() {
         app: false,
         module: true
     }]);
+    _eConfig.apply(this);
 };
 
 util.inherits(AngularViewGenerator, _eGeneratorBase);
 
-/**
- * Create the Angular views directory structure
- */
+/** Download the source files */
+AngularViewGenerator.prototype.generateSrc = function generateSrc() {
+    _eDownloadSource.apply(this, [{
+        _eMkDirs: _eMkDirs,
+        generator: 'angularView'
+    }]);
+};
+
+/** Create the Angular views directory structure */
 AngularViewGenerator.prototype.angularDirs = function angularDirs() {
-    var self = this;
+    var appNameLp    = this.mdf.app.name.lowerPlural,
+        moduleNameLp = this.mdf.module.name.lowerPlural;
 
     // Relative project paths
-    var projectAngularApp = 'client/' + this.mdf.app.name.lowerPlural + '/',
-        projectModuleViews = projectAngularApp + 'js/views/' + this.mdf.module.name.lowerPlural + '/';
-
-    var appDirs = [
-        projectModuleViews
-    ];
-
-    appDirs.forEach(function(element) {
-        self.mkdir(element);
-    });
+    var projectModuleViews = [
+        this._eDir.project.client,
+        appNameLp + '/' + 'js/views/' + moduleNameLp + '/'
+    ].join('');
 
     // TODO: This is not yet usable. I need to upgrade the entire automation of
     // TODO: test automation so that its production ready.
-    var testRoot = 'test/angular/' + this.mdf.app.name.lowerPlural + '/views/' + this.mdf.module.name.lowerPlural + '/';
+    var testRoot = 'test/angular/' + appNameLp + '/views/' + moduleNameLp + '/';
 
-    var testDirs = [
+    _eMkDirs.apply(this, [[
+        projectModuleViews,
         testRoot
-    ];
-
-    testDirs.forEach(function(element) {
-        self.mkdir(element);
-    });
+    ]]);
 };
 
-/**
- * Create the Angular files - Routes
- */
+/** Create the Angular files - Routes */
 AngularViewGenerator.prototype.angularFiles = function angularFiles() {
-    // Generator template base directory
-    var genBase = _eDir.generator.templates;
+    var appNameLp    = this.mdf.app.name.lowerPlural,
+        moduleNameLp = this.mdf.module.name.lowerPlural;
 
-    // Directory of the template used by the application defined in the MDF
-    var genTemplate      = genBase + this.mdf.module.angular.template + '/',
-        genAngularModule = genTemplate + 'angular/',
-        genViews         = genAngularModule + 'views/';
+    var genViews = [
+        this._eDir.download.src,
+        'client/' + appNameLp + '/views/' + moduleNameLp + '/'
+    ].join('');
 
-    // Relative project paths
-    var projectAngularApp    = 'client/' + this.mdf.app.name.lowerPlural + '/',
-        projectViews         = projectAngularApp + 'views/',
-        moduleViews          = projectViews + this.mdf.module.name.lowerPlural + '/';
-
-    var modelName = this.mdf.module.model.name;
+    var projectViews = [
+        this._eDir.project.client,
+        appNameLp + '/views/' + moduleNameLp + '/'
+    ].join('');
 
     // Views
-    this.createHtml = _eCreateHtml(modelName, this.mdf.module.schema.fields);
-    this.template(genViews + 'create.html',   moduleViews + 'create.html');
+    this.copy(genViews + 'create.html',   projectViews + 'create.html');
+    this.copy(genViews + 'read-all.html', projectViews + 'read-all.html');
+    this.copy(genViews + 'read-one.html', projectViews + 'read-one.html');
+};
 
-    this.readAllHtml = _eReadAllHtml(this.mdf.module.urlBase, modelName, this.mdf.module.schema.fields);
-    this.template(genViews + 'read-all.html', moduleViews + 'read-all.html');
-
-    this.readOneHtml = _eReadOneHtml(modelName, this.mdf.module.schema.fields);
-    this.template(genViews + 'read-one.html', moduleViews + 'read-one.html');
+/** Cleanup downloadDir */
+AngularViewGenerator.prototype.cleanupDownloadDir = function cleanupDownloadDir() {
+    rimraf(this._eDir.download.root, function(err) {
+        if (err) {
+            console.log(err);
+        }
+    });
 };
