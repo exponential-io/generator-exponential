@@ -1,27 +1,22 @@
-'use strict';
-
 /**
  * Create an Exponential API. APIs are created using a single generator as each
  * API is a combination of an application + module. Therefore, the application
  * and module generators are combined into a single generator (this one).
  *
- * @copyright Copyright 2013 Exponential.io. All rights reserved.
+ * @copyright Copyright 2014 Exponential.io. All rights reserved.
  * @author Akbar S. Ahmed <akbar@exponential.io>
  */
+'use strict';
 
-var util            = require('util'),
-    _               = require('lodash'),
-    yeoman          = require('yeoman-generator'),
-    _eArguments     = require('../util/arguments'),
-    _eOptions       = require('../util/options'),
-    _eDir           = require('../util/directories')(),
-    _eSchema        = require('../util/mongoose-schema'),
-    _eIndexes       = require('../util/mongoose-schema/indexes'),
-    _eGeneratorBase = require('../util/generator-base'),
-    _eLoadMdf       = require('../util/load-mdf'),
-    _eMkDirs        = require('../util/mkdir'),
-    _eReadAllCols   = require('../util/schema-read-all-columns'),
-    _eReadOneCols   = require('../util/schema-read-one-columns');
+
+var util             = require('util'),
+    _                = require('lodash'),
+    _eGeneratorBase  = require('../util/generator-base'),
+    _eLoadMdf        = require('../util/load-mdf'),
+    _eMkDirs         = require('../util/mkdir'),
+    rimraf           = require('rimraf'),
+    _eDownloadSource = require('../util/download-source'),
+    _eConfig         = require('../util/config');
 
 
 var apiGenerator = module.exports = function apiGenerator() {
@@ -31,55 +26,70 @@ var apiGenerator = module.exports = function apiGenerator() {
         app: false,
         module: true
     }]);
+    _eConfig.apply(this);
 };
 
 util.inherits(apiGenerator, _eGeneratorBase);
 
-/**
- * Create the API application directory structure
- */
+/** Download the source files */
+apiGenerator.prototype.generateSrc = function generateSrc() {
+    _eDownloadSource.apply(this, [{
+        _eMkDirs: _eMkDirs,
+        generator: 'api'
+    }]);
+};
+
+/** Create the API application directory structure */
 apiGenerator.prototype.apiDirs = function apiDirs() {
     _eMkDirs.apply(this, [[
         'test/api/' + this.mdf.module.name.lowerPlural + '-api'
     ]]);
 };
 
-/**
- * Create the API application files
- */
+/** Create the API application files */
 apiGenerator.prototype.apiModuleFiles = function apiModuleFiles() {
-    var _items = this.mdf.module.name.lowerPlural,
-        _item  = this.mdf.module.name.lowerSingular;
+    var moduleNameLs = this.mdf.module.name.lowerSingular,
+        moduleNameLp = this.mdf.module.name.lowerPlural;
 
-    // Generator template base directory
-    var genBase = _eDir.generator.templates;
+    // Controller
+    var genController = [
+        this._eDir.download.src, 'server/controllers/', moduleNameLp, '-api.js'
+    ].join('');
 
-    // Directory of the template used by the application defined in the MDF
-    var genTemplate    = genBase     + this.mdf.module.api.template + '/',
-        genApi         = genTemplate + 'api/',
-        genControllers = genApi      + 'controllers/',
-        genModels      = genApi      + 'models/',
-        genRouters     = genApi      + 'routers/';
+    var projectController = [
+        this._eDir.project.server, 'controllers/', moduleNameLp, '-api.js'
+    ].join('');
 
-    // Relative project paths
-    var projectControllers = 'server/controllers/',
-        projectModels      = 'server/models/',
-        projectRouters     = 'server/routers/';
+    this.copy(genController, projectController);
 
-    // Controllers
+    // Model
+    var genModel = [
+        this._eDir.download.src, 'server/models/', moduleNameLs, '.js'
+    ].join('');
 
-    this.readOneColumns = _eReadOneCols(this.mdf.module.schema.fields);
-    this.readAllColumns = _eReadAllCols(this.mdf.module.schema.fields);
+    var projectModel = [
+        this._eDir.project.server, 'models/', moduleNameLs, '.js'
+    ].join('');
 
-    this.modelInstance = this.mdf.module.model.name.lowerSingular;
-    this.modelClass = this.mdf.module.model.name.upperSingular;
-    this.template(genControllers + 'controller-api.js', projectControllers + _items + '-api.js');
+    this.copy(genModel, projectModel);
 
-    // Models
-    this.schema = _eSchema(this.mdf.module.schema.fields);
-    this.indexes = _eIndexes(this.mdf.module.schema);
-    this.template(genModels + 'model-api.js', projectModels + _item + '.js');
+    // Router
+    var genRouter = [
+        this._eDir.download.src, 'server/routers/', moduleNameLp, '-api.js'
+    ].join('');
 
-    // Routers
-    this.template(genRouters + 'router-api.js', projectRouters + _items + '-api.js');
+    var projectRouter = [
+        this._eDir.project.server, 'routers/', moduleNameLp, '-api.js'
+    ].join('');
+
+    this.copy(genRouter, projectRouter);
+};
+
+/** Cleanup downloadDir */
+apiGenerator.prototype.cleanupDownloadDir = function cleanupDownloadDir() {
+    rimraf(this._eDir.download.root, function(err) {
+        if (err) {
+            console.log(err);
+        }
+    });
 };
