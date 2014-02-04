@@ -1,21 +1,19 @@
-'use strict';
-
 /**
  * Create a Mongoose model.
  *
- * @copyright Copyright 2013 Exponential.io. All rights reserved.
+ * @copyright Copyright 2014 Exponential.io. All rights reserved.
  * @author Akbar S. Ahmed <akbar@exponential.io>
  */
+'use strict';
+
 
 var util            = require('util'),
-    _               = require('lodash'),
-    yeoman          = require('yeoman-generator'),
-    _eArguments     = require('../util/arguments'),
-    _eOptions       = require('../util/options'),
-    _eSchema        = require('../util/mongoose-schema'),
-    _eIndexes       = require('../util/mongoose-schema/indexes'),
     _eGeneratorBase = require('../util/generator-base'),
-    _eLoadMdf       = require('../util/load-mdf');
+    _eLoadMdf       = require('../util/load-mdf'),
+    rimraf           = require('rimraf'),
+    _eMkDirs         = require('../util/mkdir'),
+    _eDownloadSource = require('../util/download-source'),
+    _eConfig         = require('../util/config');
 
 
 var mongooseModelGenerator = module.exports = function mongooseModelGenerator() {
@@ -25,9 +23,18 @@ var mongooseModelGenerator = module.exports = function mongooseModelGenerator() 
         app: false,
         module: true
     }]);
+    _eConfig.apply(this);
 };
 
 util.inherits(mongooseModelGenerator, _eGeneratorBase);
+
+/** Download the source files */
+mongooseModelGenerator.prototype.generateSrc = function generateSrc() {
+    _eDownloadSource.apply(this, [{
+        _eMkDirs: _eMkDirs,
+        generator: 'mongooseModel'
+    }]);
+};
 
 /** Create the directory structure */
 mongooseModelGenerator.prototype.createDirs = function createDirs() {
@@ -38,15 +45,24 @@ mongooseModelGenerator.prototype.createDirs = function createDirs() {
 
 /** Create the Mongoose model */
 mongooseModelGenerator.prototype.createModel = function createModel() {
-    // Mongoose model template (source)
-    var genModel = this._eDir.generator.templates + 'mongoose/model.js';
+    var modelNameLs = this.mdf.module.model.name.lowerSingular;
 
-    // Project model (target)
-    var projectModel = 'server/models/' + this.mdf.module.model.name.lowerSingular + '.js';
+    var genModel = [
+        this._eDir.download.src, 'server/models/', modelNameLs + '.js'
+    ].join('');
 
-    // Generate the schema and index source code, then pass it into the model
-    // template
-    this.schema = _eSchema(this.mdf.module.schema.fields);
-    this.indexes = _eIndexes(this.mdf.module.schema);
-    this.template(genModel, projectModel, this);
+    var projectModel = [
+        this._eDir.project.server, 'models/', modelNameLs + '.js'
+    ].join('');
+
+    this.copy(genModel, projectModel);
+};
+
+/** Cleanup downloadDir */
+mongooseModelGenerator.prototype.cleanupDownloadDir = function cleanupDownloadDir() {
+    rimraf(this._eDir.download.root, function(err) {
+        if (err) {
+            console.log(err);
+        }
+    });
 };

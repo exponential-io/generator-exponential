@@ -40,6 +40,7 @@ module.exports = function(options) {
         generateExpressCtrlApi   = host + '/api/v1/exponential/express/controller',
         generateExpressRouterApi = host + '/api/v1/exponential/express/router',
         generateExpressViewApi   = host + '/api/v1/exponential/express/view',
+        generateMongooseModelApi = host + '/api/v1/exponential/mongoose/model',
         apiUrl;
 
     if (options.generator === 'project') {
@@ -66,6 +67,8 @@ module.exports = function(options) {
         apiUrl = generateExpressRouterApi;
     } else if (options.generator === 'expressView') {
         apiUrl = generateExpressViewApi;
+    } else if (options.generator === 'mongooseModel') {
+        apiUrl = generateMongooseModelApi;
     }
 
     var mdfJson = this.mdf;
