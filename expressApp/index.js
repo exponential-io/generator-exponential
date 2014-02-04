@@ -1,22 +1,65 @@
-'use strict';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+// This generator is no longer used as it's fairly pointless. All it did was
+// copy website files from a local directory on top of the project files.
+// However, it would be much easier for a user to modify the original files in
+// the project so that they can watch the updates as they edit files.
+
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /**
  * Create the scaffolding for an Express app or website.
  *
- * @copyright Copyright 2013 Exponential.io. All rights reserved.
+ * @copyright Copyright 2014 Exponential.io. All rights reserved.
  * @author Akbar S. Ahmed <akbar@exponential.io>
  */
+'use strict';
+
 
 var util            = require('util'),
     _               = require('lodash'),
-    yeoman          = require('yeoman-generator'),
-    _eArguments     = require('../util/arguments'),
-    _eOptions       = require('../util/options'),
     fs              = require('fs'),
     path            = require('path'),
     _eGeneratorBase = require('../util/generator-base'),
     _eLoadMdf       = require('../util/load-mdf'),
-    _eMkDirs        = require('../util/mkdir');
+    _eMkDirs        = require('../util/mkdir'),
+    rimraf           = require('rimraf'),
+    _eDownloadSource = require('../util/download-source'),
+    _eConfig         = require('../util/config');
 
 
 var expressAppGenerator = module.exports = function expressAppGenerator() {
@@ -26,9 +69,18 @@ var expressAppGenerator = module.exports = function expressAppGenerator() {
         app: true,
         module: false
     }]);
+    _eConfig.apply(this);
 };
 
 util.inherits(expressAppGenerator, _eGeneratorBase);
+
+/** Download the source files */
+expressAppGenerator.prototype.generateSrc = function generateSrc() {
+    _eDownloadSource.apply(this, [{
+        _eMkDirs: _eMkDirs,
+        generator: 'expressApp'
+    }]);
+};
 
 /** Create project directory structure */
 expressAppGenerator.prototype.projectDirs = function projectDirs() {
@@ -44,57 +96,67 @@ expressAppGenerator.prototype.projectDirs = function projectDirs() {
 expressAppGenerator.prototype.setupExpress = function setupExpress() {
     var self = this;
 
-    var webTemplate    = this._eDir.website.root,
-        webServer      = this._eDir.website.server.root,
-//        webControllers = this._eDir.website.views.controllers,
-//        webModels      = this._eDir.website.views.models,
-        webViews       = this._eDir.website.server.views.root,
-        webHelpers     = this._eDir.website.server.views.helpers,
-        webLayouts     = this._eDir.website.server.views.layouts,
-        webPartials    = this._eDir.website.server.views.partials;
+    var genViews    = this._eDir.download.src + 'server/views/',
+        genHelpers  = this._eDir.download.src + 'server/views/helpers/',
+        genLayouts  = this._eDir.download.src + 'server/views/layouts/',
+        genPartials = this._eDir.download.src + 'server/views/partials/';
+
+    var projectViews    = this._eDir.project.server + 'views/',
+        projectHelpers  = this._eDir.project.server + 'views/helpers/',
+        projectLayouts  = this._eDir.project.server + 'views/layouts/',
+        projectPartials = this._eDir.project.server + 'views/partials/';
 
     // Views
-    this.copy(webViews + '404.hbs', 'server/views/404.hbs');
-    this.copy(webViews + '500.hbs', 'server/views/500.hbs');
+    this.copy(genViews + '404.hbs', projectViews + '404.hbs');
+    this.copy(genViews + '500.hbs', projectViews + '500.hbs');
 
     // Helpers
-    fs.readdirSync(this._eDir.website.server.views.helpers).forEach(function(helper) {
-        var helperPath = this._eDir.website.server.views.helpers + helper;
+    fs.readdirSync(genHelpers).forEach(function(helper) {
+        var helperPath = genHelpers + helper;
         if (!fs.statSync(helperPath).isDirectory()) {
-            self.template(helperPath, 'server/views/helpers/' + helper);
+            self.copy(helperPath, projectHelpers + helper);
         }
     });
 
     // Layouts
-    fs.readdirSync(this._eDir.website.server.views.layouts).forEach(function(layout) {
-        var layoutPath = this._eDir.website.server.views.layouts + layout;
+    fs.readdirSync(genLayouts).forEach(function(layout) {
+        var layoutPath = genLayouts + layout;
         if (!fs.statSync(layoutPath).isDirectory()) {
-            self.template(layoutPath, 'server/views/layouts/' + layout);
+            self.copy(layoutPath, projectLayouts + layout);
         }
     });
 
     // Partials
-    fs.readdirSync(this._eDir.website.server.views.partials).forEach(function(partial) {
-        var partialPath = this._eDir.website.server.views.partials + partial;
+    fs.readdirSync(genPartials).forEach(function(partial) {
+        var partialPath = genPartials + partial;
         if (!fs.statSync(partialPath).isDirectory()) {
-            self.template(partialPath, 'server/views/partials/' + partial);
+            self.copy(partialPath, projectPartials + partial);
         }
     });
 };
 
 /** Copy images */
 expressAppGenerator.prototype.copyImages = function copyImages() {
-    var projectClient = 'client/';
-//        projectImages = projectClient + 'images/';
+    var genFavicon = this._eDir.download.src + 'client/images/favicon.ico',
+        projectFavicon = this._eDir.project.client + 'favicon.ico';
 
-    this.copy(this._eDir.website.client.images + 'favicon.ico', projectClient + 'favicon.ico');
+    this.copy(genFavicon, projectFavicon);
 };
 
 /** Setup styles (CSS, Sass, Less, etc) */
 expressAppGenerator.prototype.setupStyles = function setupStyles() {
-    var projectClient = 'client/',
-        projectStyles = projectClient + 'styles/';
+    var genStyles = this._eDir.download.src + 'client/styles/',
+        projectStyles = this._eDir.project.client + 'styles/';
 
-    this.copy(this._eDir.website.client.styles + 'app.css',    projectStyles + 'app.css');
-    this.copy(this._eDir.website.client.styles + 'common.css', projectStyles + 'common.css');
+    this.copy(genStyles + 'app.css',    projectStyles + 'app.css');
+    this.copy(genStyles + 'common.css', projectStyles + 'common.css');
+};
+
+/** Cleanup downloadDir */
+expressAppGenerator.prototype.cleanupDownloadDir = function cleanupDownloadDir() {
+    rimraf(this._eDir.download.root, function(err) {
+        if (err) {
+            console.log(err);
+        }
+    });
 };

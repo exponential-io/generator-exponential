@@ -36,6 +36,10 @@ module.exports = function(options) {
         generateAngularSrvApi    = host + '/api/v1/exponential/angular/service',
         generateAngularViewApi   = host + '/api/v1/exponential/angular/view',
         generateApiApi           = host + '/api/v1/exponential/api',
+        //generateExpressAppApi    = host + '/api/v1/exponential/express/app',
+        generateExpressCtrlApi   = host + '/api/v1/exponential/express/controller',
+        generateExpressRouterApi = host + '/api/v1/exponential/express/router',
+        generateExpressViewApi   = host + '/api/v1/exponential/express/view',
         apiUrl;
 
     if (options.generator === 'project') {
@@ -54,6 +58,14 @@ module.exports = function(options) {
         apiUrl = generateAngularViewApi;
     } else if (options.generator === 'api') {
         apiUrl = generateApiApi;
+//    } else if (options.generator === 'expressApp') {
+//        apiUrl = generateExpressAppApi;
+    } else if (options.generator === 'expressController') {
+        apiUrl = generateExpressCtrlApi;
+    } else if (options.generator === 'expressRouter') {
+        apiUrl = generateExpressRouterApi;
+    } else if (options.generator === 'expressView') {
+        apiUrl = generateExpressViewApi;
     }
 
     var mdfJson = this.mdf;
