@@ -1,7 +1,7 @@
 {
   "name": "generator-exponential",
-  "version": "0.0.0",
-  "description": "Rapidly develop applications with Exponential.io",
+  "version": "0.0.1",
+  "description": "Exponential.io generator - Build better apps faster with less effort",
   "keywords": [
     "exponential",
     "generator",
@@ -14,7 +14,7 @@
     "tools",
     "tooling"
   ],
-  "homepage": "https://github.com/Delixus/generator-exponential",
+  "homepage": "http://www.exponential.io",
   "bugs": {
     "url": "https://github.com/Delixus/generator-exponential/issues"
   },
@@ -27,10 +27,6 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:Delixus/generator-exponential.git"
-  },
-  "scripts": {
-    "test": "mocha",
-    "postinstall": "node ./util/postinstall"
   },
   "dependencies": {
     "colors": "~0.6.2",
@@ -53,7 +49,8 @@
   },
   "licenses": [
     {
-      "type": "Proprietary"
+      "type": "proprietary",
+      "url": "http://www.exponential.io/license"
     }
   ],
   "preferGlobal": true
