@@ -25,7 +25,8 @@ module.exports = function(options) {
     // TODO: PUT THE URL INTO A CENTRALIZED MODULE WITH A CONFIG FILE
     // TODO: ===================================================================
 
-    var host = 'http://localhost:3000',
+    // host = 'http://localhost:3000'
+    var host = 'http://www.exponential.io',
         xsrfApi                  = host + '/api/v1/xsrf-cookie',
         loginApi                 = host + '/api/v1/login',
         generateProjectApi       = host + '/api/v1/exponential/project',

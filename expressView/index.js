@@ -93,7 +93,7 @@ expressViewGenerator.prototype.createController = function createController() {
             '/', mdfReadOneView.filename, mdfReadOneView.extension
         ].join('');
 
-        this.copy(genReadAllOneFile, projectReadOneViewFile);
+        this.copy(genReadOneFile, projectReadOneViewFile);
     }
 
     if (this.mdf.module.express.update.use) {

@@ -77,7 +77,7 @@ ExponentialProjectGenerator.prototype.projectDirs = function projectDirs() {
 /** Setup Express server */
 ExponentialProjectGenerator.prototype.setupExpress = function setupExpress() {
     // Server directory
-    var _server = this._eDir.download.projectSkel + 'server/';
+    var _server = this._eDir.download.src + 'server/';
 
     // Express configuration
     var _config     = _server + 'config/',
@@ -92,6 +92,8 @@ ExponentialProjectGenerator.prototype.setupExpress = function setupExpress() {
         _layouts     = _views  + 'layouts/',
         _partials    = _views  + 'partials/';
 
+    console.log()
+    console.log(this._eDir.download.src);
 
     // Main server.js
     this.copy(_server + 'server.js', this._eDir.project.server + 'server.js');
@@ -140,7 +142,7 @@ ExponentialProjectGenerator.prototype.setupExpress = function setupExpress() {
 /** Create the server code library */
 ExponentialProjectGenerator.prototype.serverLib = function serverLib() {
     // Lib
-    var genLib = this._eDir.download.projectSkel + 'server/lib/';
+    var genLib = this._eDir.download.src + 'server/lib/';
 
     var projectLib = this._eDir.project.server + 'lib/';
 
@@ -150,7 +152,7 @@ ExponentialProjectGenerator.prototype.serverLib = function serverLib() {
 /** Create an Express router for all Angular entry points */
 ExponentialProjectGenerator.prototype.angularEntryPoints = function angularEntryPoints() {
     // Generator routers directory
-    var genRouters = this._eDir.download.projectSkel + 'server/routers/';
+    var genRouters = this._eDir.download.src + 'server/routers/';
 
     // Project routers directory
     var projectRouters = this._eDir.project.server + 'routers/';
@@ -161,7 +163,7 @@ ExponentialProjectGenerator.prototype.angularEntryPoints = function angularEntry
 /** Create the Index page */
 ExponentialProjectGenerator.prototype.indexPage = function indexPage() {
 //    // Server directory
-//    var gServer = this._eDir.download.projectSkel + 'server/';
+//    var gServer = this._eDir.download.src + 'server/';
 //
 //    // Common (shared) controllers, models, routers and views
 //    var gControllers = gServer + 'controllers/',
@@ -169,7 +171,7 @@ ExponentialProjectGenerator.prototype.indexPage = function indexPage() {
 //        gWebsite     = gServer + 'views/website/';
 
     // Generator routers directory
-    var genRouters = this._eDir.download.projectSkel + 'server/routers/';
+    var genRouters = this._eDir.download.src + 'server/routers/';
 
     // Project routers directory
     var projectRouters = this._eDir.project.server + 'routers/';
@@ -182,7 +184,7 @@ ExponentialProjectGenerator.prototype.indexPage = function indexPage() {
 /** Create the Accounts module */
 ExponentialProjectGenerator.prototype.accountsModule = function accountsModule() {
     // Server directory
-    var genServer = this._eDir.download.projectSkel + 'server/';
+    var genServer = this._eDir.download.src + 'server/';
 
     // Common (shared) controllers, models, routers and views
     var genControllers = genServer + 'controllers/',
@@ -211,7 +213,7 @@ ExponentialProjectGenerator.prototype.accountsModule = function accountsModule()
     this.copy(genRouters + 'accounts-api.js', projectRouters + 'accounts-api.js');
 
     // Views
-    var genAccounts = this._eDir.download.projectSkel + 'server/views/accounts/';
+    var genAccounts = this._eDir.download.src + 'server/views/accounts/';
     var projectAccounts = projectViews + 'accounts/';
 
 
@@ -225,7 +227,7 @@ ExponentialProjectGenerator.prototype.accountsModule = function accountsModule()
 
 /** Copy images */
 ExponentialProjectGenerator.prototype.copyImages = function copyImages() {
-    var genClient = this._eDir.download.projectSkel + 'client/',
+    var genClient = this._eDir.download.src + 'client/',
         genHome  = genClient + 'images/website/home/',
         genIcons = genClient + 'images/website/icons/';
 
@@ -247,7 +249,7 @@ ExponentialProjectGenerator.prototype.copyImages = function copyImages() {
 
 /** Setup styles (CSS, Sass, Less, etc) */
 ExponentialProjectGenerator.prototype.setupStyles = function setupStyles() {
-    var genStyles = this._eDir.download.projectSkel + 'client/styles/';
+    var genStyles = this._eDir.download.src + 'client/styles/';
 
     var projectStyles = this._eDir.project.client + 'styles/';
 
@@ -257,7 +259,7 @@ ExponentialProjectGenerator.prototype.setupStyles = function setupStyles() {
 
 /** Setup Grunt for task automation */
 ExponentialProjectGenerator.prototype.setupGrunt = function setupGrunt() {
-    var genProjectSkel = this._eDir.download.projectSkel;
+    var genProjectSkel = this._eDir.download.src;
 
     var projectRoot = this._eDir.project.root;
 
@@ -266,7 +268,7 @@ ExponentialProjectGenerator.prototype.setupGrunt = function setupGrunt() {
 
 /** Setup NPM for server-side packages */
 ExponentialProjectGenerator.prototype.setupNpm = function setupNpm() {
-    var genProjectSkel = this._eDir.download.projectSkel;
+    var genProjectSkel = this._eDir.download.src;
 
     var projectRoot = this._eDir.project.root;
 
@@ -275,7 +277,7 @@ ExponentialProjectGenerator.prototype.setupNpm = function setupNpm() {
 
 /** Setup Bower for client-side packages */
 ExponentialProjectGenerator.prototype.setupBower = function setupBower() {
-    var genProjectSkel = this._eDir.download.projectSkel;
+    var genProjectSkel = this._eDir.download.src;
 
     var projectRoot = this._eDir.project.root;
 
@@ -285,7 +287,7 @@ ExponentialProjectGenerator.prototype.setupBower = function setupBower() {
 
 /** Setup Git / Github support for revision control */
 ExponentialProjectGenerator.prototype.setupGit = function setupGit() {
-    var genProjectSkel = this._eDir.download.projectSkel;
+    var genProjectSkel = this._eDir.download.src;
 
     var projectRoot = this._eDir.project.root;
 
@@ -294,7 +296,7 @@ ExponentialProjectGenerator.prototype.setupGit = function setupGit() {
 
 /** EditorConfig to ensure a consistent coding style in Exponential projects */
 ExponentialProjectGenerator.prototype.setupEditorConfig = function setupEditorConfig() {
-    var genProjectSkel = this._eDir.download.projectSkel;
+    var genProjectSkel = this._eDir.download.src;
 
     var projectRoot = this._eDir.project.root;
 
@@ -303,7 +305,7 @@ ExponentialProjectGenerator.prototype.setupEditorConfig = function setupEditorCo
 
 /** Setup JSHint to promote code quality */
 ExponentialProjectGenerator.prototype.setupJSHint = function setupJSHint() {
-    var genProjectSkel = this._eDir.download.projectSkel;
+    var genProjectSkel = this._eDir.download.src;
 
     var projectRoot = this._eDir.project.root;
 
@@ -312,7 +314,7 @@ ExponentialProjectGenerator.prototype.setupJSHint = function setupJSHint() {
 
 /** Setup misc project files */
 ExponentialProjectGenerator.prototype.setupProjectFiles = function setupProjectFiles() {
-    var genProjectSkel = this._eDir.download.projectSkel;
+    var genProjectSkel = this._eDir.download.src;
 
     var projectRoot = this._eDir.project.root;
 
@@ -322,7 +324,7 @@ ExponentialProjectGenerator.prototype.setupProjectFiles = function setupProjectF
 
 /** Setup Heroku support */
 ExponentialProjectGenerator.prototype.setupHeroku = function setupHeroku() {
-    var genProjectSkel = this._eDir.download.projectSkel;
+    var genProjectSkel = this._eDir.download.src;
 
     var projectRoot = this._eDir.project.root;
 
