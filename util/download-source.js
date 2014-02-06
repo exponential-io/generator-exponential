@@ -25,51 +25,58 @@ module.exports = function(options) {
     // TODO: PUT THE URL INTO A CENTRALIZED MODULE WITH A CONFIG FILE
     // TODO: ===================================================================
 
+    // cacheBuster is a monotonically increasing date/time stamp that prevents
+    // aggressive proxy caching servers from returning stale (cached) responses.
+    // We append this value to each URL to get an uncached response, however
+    // this value is ignored by the server.
+    var cacheBuster = Date.now();
+
     // host = 'http://localhost:3000'
     var host = 'http://www.exponential.io',
-        xsrfApi                  = host + '/api/v1/xsrf-cookie',
-        loginApi                 = host + '/api/v1/login',
-        generateProjectApi       = host + '/api/v1/exponential/project',
-        generateAngularAppApi    = host + '/api/v1/exponential/angular/app',
-        generateAngularCtrlApi   = host + '/api/v1/exponential/angular/controller',
-        generateAngularModApi    = host + '/api/v1/exponential/angular/module',
-        generateAngularRouterApi = host + '/api/v1/exponential/angular/router',
-        generateAngularSrvApi    = host + '/api/v1/exponential/angular/service',
-        generateAngularViewApi   = host + '/api/v1/exponential/angular/view',
-        generateApiApi           = host + '/api/v1/exponential/api',
-        //generateExpressAppApi    = host + '/api/v1/exponential/express/app',
-        generateExpressCtrlApi   = host + '/api/v1/exponential/express/controller',
-        generateExpressRouterApi = host + '/api/v1/exponential/express/router',
-        generateExpressViewApi   = host + '/api/v1/exponential/express/view',
-        generateMongooseModelApi = host + '/api/v1/exponential/mongoose/model',
+        prefix = host + '/api/v1/',
+        xsrfApi             = prefix + 'xsrf-cookie?c=' + cacheBuster,
+        loginApi            = prefix + 'login?c=' + cacheBuster,
+        genProjectApi       = prefix + 'exponential/project?c=' + cacheBuster,
+        genAngularAppApi    = prefix + 'exponential/angular/app?c=' + cacheBuster,
+        genAngularCtrlApi   = prefix + 'exponential/angular/controller?c=' + cacheBuster,
+        genAngularModApi    = prefix + 'exponential/angular/module?c=' + cacheBuster,
+        genAngularRouterApi = prefix + 'exponential/angular/router?c=' + cacheBuster,
+        genAngularSrvApi    = prefix + 'exponential/angular/service?c=' + cacheBuster,
+        genAngularViewApi   = prefix + 'exponential/angular/view?c=' + cacheBuster,
+        genApiApi           = prefix + 'exponential/api?c=' + cacheBuster,
+        //genExpressAppApi    = prefix + 'exponential/express/app?c=' + cacheBuster,
+        genExpressCtrlApi   = prefix + 'exponential/express/controller?c=' + cacheBuster,
+        genExpressRouterApi = prefix + 'exponential/express/router?c=' + cacheBuster,
+        genExpressViewApi   = prefix + 'exponential/express/view?c=' + cacheBuster,
+        genMongooseModelApi = prefix + 'exponential/mongoose/model?c=' + cacheBuster,
         apiUrl;
 
     if (options.generator === 'project') {
-        apiUrl = generateProjectApi;
+        apiUrl = genProjectApi;
     } else if (options.generator === 'angularApp') {
-        apiUrl = generateAngularAppApi;
+        apiUrl = genAngularAppApi;
     } else if (options.generator === 'angularController') {
-        apiUrl = generateAngularCtrlApi;
+        apiUrl = genAngularCtrlApi;
     } else if (options.generator === 'angularModule') {
-        apiUrl = generateAngularModApi;
+        apiUrl = genAngularModApi;
     } else if (options.generator === 'angularRouter') {
-        apiUrl = generateAngularRouterApi;
+        apiUrl = genAngularRouterApi;
     } else if (options.generator === 'angularService') {
-        apiUrl = generateAngularSrvApi;
+        apiUrl = genAngularSrvApi;
     } else if (options.generator === 'angularView') {
-        apiUrl = generateAngularViewApi;
+        apiUrl = genAngularViewApi;
     } else if (options.generator === 'api') {
-        apiUrl = generateApiApi;
+        apiUrl = genApiApi;
 //    } else if (options.generator === 'expressApp') {
-//        apiUrl = generateExpressAppApi;
+//        apiUrl = genExpressAppApi;
     } else if (options.generator === 'expressController') {
-        apiUrl = generateExpressCtrlApi;
+        apiUrl = genExpressCtrlApi;
     } else if (options.generator === 'expressRouter') {
-        apiUrl = generateExpressRouterApi;
+        apiUrl = genExpressRouterApi;
     } else if (options.generator === 'expressView') {
-        apiUrl = generateExpressViewApi;
+        apiUrl = genExpressViewApi;
     } else if (options.generator === 'mongooseModel') {
-        apiUrl = generateMongooseModelApi;
+        apiUrl = genMongooseModelApi;
     }
 
     var mdfJson = this.mdf;
