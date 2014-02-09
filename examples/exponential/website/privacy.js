@@ -8,7 +8,7 @@
  * most of what is in this file is not needed. However, it's kept here to make a
  * diff easy.
  *
- * @module exponential/website/privacy
+ * @module mdf/website/privacy
  */
 module.exports = function(_) {
     /**
@@ -657,7 +657,7 @@ module.exports = function(_) {
             // unique: true,
             /**
              * [Optional] Limit the allowed values.
-             * @type {Array,|String}
+             * @type {Array|String}
              */
             // TODO: DOES THIS WORK WITH NUMBER
             //allowedValues: [1, 5, 7, 10],

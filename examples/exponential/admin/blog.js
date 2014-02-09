@@ -17,7 +17,7 @@
  *   there are a number of modules including the `Companies` module, the
  *   `Contacts` module, the `Opportunities` module, and so on.
  *
- * @module exponential/crm/companies
+ * @module mdf/crm/companies
  */
 module.exports = function(_) {
     /**

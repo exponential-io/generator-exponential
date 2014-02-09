@@ -1,9 +1,7 @@
-/**
- * Create an Angular view.
- *
- * @copyright Copyright 2014 Exponential.io. All rights reserved.
- * @author Akbar S. Ahmed <akbar@exponential.io>
- */
+// # Create an Angular view.
+
+// @copyright Copyright 2014 Exponential.io. All rights reserved.
+// @author Akbar S. Ahmed <akbar@exponential.io>
 'use strict';
 
 
@@ -29,7 +27,7 @@ var AngularViewGenerator = module.exports = function AngularViewGenerator() {
 
 util.inherits(AngularViewGenerator, _eGeneratorBase);
 
-/** Download the source files */
+// Download the source files
 AngularViewGenerator.prototype.generateSrc = function generateSrc() {
     _eDownloadSource.apply(this, [{
         _eMkDirs: _eMkDirs,
@@ -37,7 +35,7 @@ AngularViewGenerator.prototype.generateSrc = function generateSrc() {
     }]);
 };
 
-/** Create the Angular views directory structure */
+// Create the Angular views directory structure
 AngularViewGenerator.prototype.angularDirs = function angularDirs() {
     var appNameLp    = this.mdf.app.name.lowerPlural,
         moduleNameLp = this.mdf.module.name.lowerPlural;
@@ -58,7 +56,7 @@ AngularViewGenerator.prototype.angularDirs = function angularDirs() {
     ]]);
 };
 
-/** Create the Angular files - Routes */
+// Create the Angular files - Routes
 AngularViewGenerator.prototype.angularFiles = function angularFiles() {
     var appNameLp    = this.mdf.app.name.lowerPlural,
         moduleNameLp = this.mdf.module.name.lowerPlural;
@@ -79,7 +77,7 @@ AngularViewGenerator.prototype.angularFiles = function angularFiles() {
     this.copy(genViews + 'read-one.html', projectViews + 'read-one.html');
 };
 
-/** Cleanup downloadDir */
+// Cleanup downloadDir
 AngularViewGenerator.prototype.cleanupDownloadDir = function cleanupDownloadDir() {
     rimraf(this._eDir.download.root, function(err) {
         if (err) {

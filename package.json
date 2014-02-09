@@ -29,6 +29,7 @@
     "url": "git@github.com:Delixus/generator-exponential.git"
   },
   "dependencies": {
+    "adm-zip": "~0.4.4",
     "colors": "~0.6.2",
     "yeoman-generator": "~0.14.0",
     "lodash": "~2.4.1",

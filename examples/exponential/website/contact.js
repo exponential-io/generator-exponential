@@ -8,7 +8,7 @@
  * most of what is in this file is not needed. However, it's kept here to make a
  * diff easy.
  *
- * @module exponential/website/contact
+ * @module mdf/website/contact
  */
 module.exports = function(_) {
     /**

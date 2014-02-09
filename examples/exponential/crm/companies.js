@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Basic Module Definition Format (MDF). Do not confuse an Exponential module
  * with a Node module. An Exponential module refers to a modular feature within
@@ -7,18 +5,23 @@
  * own scope.
  *
  * An MDF file is comprised of several sections:
- * - project: Information about the overall project, including the package name.
- *   Projects contain 1 or more apps.
- * - app: Information about an individual application, such as a CRM
- *   application. Each application has 1 or more
- *   modules. Basically, an app groups related modules into a solution to
- *   customer problems.
- * - module: A module is a discrete unit of functionality. In a CRM application,
- *   there are a number of modules including the `Companies` module, the
- *   `Contacts` module, the `Opportunities` module, and so on.
+ * <ul>
+ * <li>project: Information about the overall project, including the package
+ *     name. Projects contain 1 or more apps.</li>
+ * <li>app: Information about an individual application, such as a CRM
+ *     application. Each application has 1 or more modules. Basically, an app
+ *     groups related modules into a solution to customer problems.</li>
+ * <li>module: A module is a discrete unit of functionality. In a CRM
+ *     application, there are a number of modules including the `Companies`
+ *     module, the `Contacts` module, the `Opportunities` module, and so on.
+ *     </li>
+ * </ul>
  *
- * @module exponential/crm/companies
+ * @module mdf/crm/companies
+ * @exports mdf
  */
+'use strict';
+
 module.exports = function(_) {
     /**
      * Module Definition Format (ADF) is an object that contains all
@@ -27,15 +30,28 @@ module.exports = function(_) {
      *
      * @type {Object}
      */
+
+    /** @namespace */
     var mdf = {
         project: require('../project')(),
         app: require('./app')(),
+        /**
+         * MDF module definition
+         * @namespace
+         * @memberof mdf
+         */
         module: {
             urlBase: '',
+            /**
+             * @namespace
+             * @memberof mdf.module
+             */
             navbar: {},
+            /** @namespace */
             angular: {
                 use: true,
                 template: 'crud-forms',
+                /** @namespace */
                 controllers: {
                     create: '',
                     readAll: '',
@@ -55,6 +71,7 @@ module.exports = function(_) {
             website: {
                 use: false
             },
+            /** @namespace */
             name: {
                 upperPlural: '',
                 lowerPlural: '',
@@ -87,13 +104,13 @@ module.exports = function(_) {
      * has a url of '/admin/blog' and the Angular views for the blog app will
      * be placed in 'client/admin/views/blog'.
      *
-     * @type {String}
+     * @type {string}
      */
     mdf.module.urlBase = 'companies';
 
     /**
      * If true, a link to the module is inserted into the app's navbar.
-     * @type {Boolean}
+     * @type {boolean}
      */
     mdf.module.navbar.display = true;
 
@@ -101,7 +118,7 @@ module.exports = function(_) {
      * Label text to display in the navbar menu. Label is only shown if display
      * is true.
      *
-     * @type {String}
+     * @type {string}
      */
     mdf.module.navbar.label = 'Companies';
 
@@ -141,24 +158,28 @@ module.exports = function(_) {
     /**
      * Name of the Angular Create controller.
      * @type {string}
+     * @memberof mdf.module.angular.controllers
      */
     mdf.module.angular.controllers.create = mdf.module.name.upperPlural + 'CreateCtrl';
 
     /**
      * Name of the Angular Read All controller.
      * @type {string}
+     * @memberof mdf.module.angular.controllers
      */
     mdf.module.angular.controllers.readAll = mdf.module.name.upperPlural + 'ReadAllCtrl';
 
     /**
      * Name of the Angular Read One controller.
      * @type {string}
+     * @memberof mdf.module.angular.controllers
      */
     mdf.module.angular.controllers.readOne = mdf.module.name.upperPlural + 'ReadOneCtrl';
 
     /**
      * Name of the Angular Update controller.
      * @type {string}
+     * @memberof mdf.module.angular.controllers
      */
     mdf.module.angular.controllers.update = mdf.module.name.upperPlural + 'Update';
 
@@ -187,6 +208,7 @@ module.exports = function(_) {
     /**
      * Configure schema options.
      * @type {Object}
+     * @namespace mdf.module.schema.options
      */
     mdf.module.schema.options = {
         // autoIndex: true,
@@ -221,6 +243,7 @@ module.exports = function(_) {
     /**
      * An array containing each database field.
      * @type {Array}
+     * @namespace mdf.module.schema.fields
      */
     mdf.module.schema.fields = [
         {
@@ -295,7 +318,8 @@ module.exports = function(_) {
              * Mongoose's enum. If a function is passed, then it must have '()'
              * appended, such as 'callFunction()'.
              *
-             * @type {String|Function}
+             * @type {String}
+             * @type {Function}
              */
             //allowedValues: ['CA', 'AZ', 'NY'],
             //allowedValues: 'usaStates()',
@@ -682,7 +706,7 @@ module.exports = function(_) {
             // unique: true,
             /**
              * [Optional] Limit the allowed values.
-             * @type {Array,|String}
+             * @type {Array|String}
              */
             // TODO: DOES THIS WORK WITH NUMBER
             //allowedValues: [1, 5, 7, 10],
@@ -790,7 +814,7 @@ module.exports = function(_) {
             type: 'Boolean',
             /**
              * HTML control type.
-             * @type {String}
+             * @type {string}
              */
             control: 'checkbox',
             /**

@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Application-level Module Definition Format (MDF). This file is included in
  * all Module-level MDF files. There can be multiple Application MDF files per
@@ -8,8 +6,10 @@
  * However, each application has one and only one Application MDF. For example,
  * a CRM application will have exactly one Application MDF.
  *
- * @module exponential/crm/app
+ * @module mdf/crm/app
  */
+'use strict';
+
 module.exports = function() {
     /**
      * Module Definition Format (MDF) is an object that contains all

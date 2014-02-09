@@ -9,7 +9,7 @@
  * - app: Information about an individual application, such as app name
  * - module: Module specific information
  *
- * @module exponential/examples/basic/app
+ * @module mdf/examples/basic/app
  */
 module.exports = function(_) {
     /**

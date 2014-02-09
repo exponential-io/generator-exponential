@@ -9,7 +9,8 @@
 var request          = require('request').defaults({ jar: true }),
     extractXsrfToken = require('../util/extract-xsrf-token'),
     fs               = require('fs'),
-    targz            = require('tar.gz');
+    targz            = require('tar.gz'),
+    Zip              = require('adm-zip');
 
 var logAndExit = function(err) {
     console.log(err);
@@ -31,8 +32,8 @@ module.exports = function(options) {
     // this value is ignored by the server.
     var cacheBuster = Date.now();
 
-    // host = 'http://localhost:3000'
-    var host = 'http://www.exponential.io',
+    var host = 'http://localhost:3000',
+    //var host = 'http://www.exponential.io',
         prefix = host + '/api/v1/',
         xsrfApi             = prefix + 'xsrf-cookie?c=' + cacheBuster,
         loginApi            = prefix + 'login?c=' + cacheBuster,
@@ -82,6 +83,12 @@ module.exports = function(options) {
     var mdfJson = this.mdf;
 
     var tarGzFilename = 'download.tar.gz';
+
+    // TODO: Make this filename the default once all generators are ported to
+    // the new streams model
+    if (options.generator === 'angularView') {
+        tarGzFilename = 'download.zip';
+    }
 
     options._eMkDirs.apply(this, [[
         '.exponential',
@@ -176,21 +183,31 @@ module.exports = function(options) {
     function extractDownload(err) {
         //       Use a date/time stamp.
         try {
-            // Extract the project skeleton which is downloaded as a .tar.gz
-            var compress = new targz().extract(
-                self._eDir.download.root + tarGzFilename,
-                self._eDir.download.root,
-                function(err) {
-                    if (err) {
-                        // TODO: Better error handling is required.
-                        console.log(err);
-                    }
-                    // At this point the .tar.gz contents have been extracted
+            // TODO: Make this filename the default once all generators are ported to
+            // the new streams model
+            if (options.generator === 'angularView') {
+                var zip = new Zip(self._eDir.download.root + tarGzFilename);
+                zip.extractAllTo(self._eDir.download.root);
 
-                    // Return control to yo
-                    cb();
-                }
-            );
+                // Return control to yo
+                cb();
+            } else {
+                // Extract the project skeleton which is downloaded as a .tar.gz
+                var compress = new targz().extract(
+                    self._eDir.download.root + tarGzFilename,
+                    self._eDir.download.root,
+                    function(err) {
+                        if (err) {
+                            // TODO: Better error handling is required.
+                            console.log(err);
+                        }
+                        // At this point the .tar.gz contents have been extracted
+
+                        // Return control to yo
+                        cb();
+                    }
+                );
+            }
         } catch (err) {
             var errorMsg = 'Exponential encountered an error while ' +
                 'downloading the project skeleton files.';

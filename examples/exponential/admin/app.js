@@ -8,7 +8,7 @@
  * However, each application has one and only one Application MDF. For example,
  * a CRM application will have exactly one Application MDF.
  *
- * @module exponential/blog/app
+ * @module mdf/blog/app
  */
 module.exports = function() {
     /**
