@@ -86,8 +86,10 @@ module.exports = function(options) {
 
     // TODO: Make this filename the default once all generators are ported to
     // the new streams model
-    if (options.generator === 'angularView' ||
-        options.generator === 'angularService') {
+    if (options.generator === 'angularController' ||
+        options.generator === 'angularRouter' ||
+        options.generator === 'angularService' ||
+        options.generator === 'angularView') {
         tarGzFilename = 'download.zip';
     }
 
@@ -186,8 +188,10 @@ module.exports = function(options) {
         try {
             // TODO: Make this filename the default once all generators are ported to
             // the new streams model
-            if (options.generator === 'angularView' ||
-                options.generator === 'angularService') {
+            if (options.generator === 'angularController' ||
+                options.generator === 'angularRouter' ||
+                options.generator === 'angularService' ||
+                options.generator === 'angularView') {
                 var zip = new Zip(self._eDir.download.root + tarGzFilename);
                 zip.extractAllTo(self._eDir.download.root);
 
