@@ -89,7 +89,8 @@ module.exports = function(options) {
     if (options.generator === 'angularController' ||
         options.generator === 'angularRouter' ||
         options.generator === 'angularService' ||
-        options.generator === 'angularView') {
+        options.generator === 'angularView' ||
+        options.generator === 'api') {
         tarGzFilename = 'download.zip';
     }
 
@@ -191,7 +192,8 @@ module.exports = function(options) {
             if (options.generator === 'angularController' ||
                 options.generator === 'angularRouter' ||
                 options.generator === 'angularService' ||
-                options.generator === 'angularView') {
+                options.generator === 'angularView' ||
+                options.generator === 'api') {
                 var zip = new Zip(self._eDir.download.root + tarGzFilename);
                 zip.extractAllTo(self._eDir.download.root);
 
