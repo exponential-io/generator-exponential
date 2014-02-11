@@ -97,7 +97,8 @@ module.exports = function(options) {
         options.generator === 'angularView' ||
         options.generator === 'api' ||
         options.generator === 'expressController' ||
-        options.generator === 'expressView') {
+        options.generator === 'expressView' ||
+        options.generator === 'mongooseModel') {
         tarGzFilename = 'download.zip';
     }
 
@@ -210,7 +211,8 @@ module.exports = function(options) {
                 options.generator === 'angularView' ||
                 options.generator === 'api' ||
                 options.generator === 'expressController' ||
-                options.generator === 'expressView') {
+                options.generator === 'expressView' ||
+                options.generator === 'mongooseModel') {
                 var zip = new Zip(self._eDir.download.root + tarGzFilename);
                 zip.extractAllTo(self._eDir.download.root);
 
