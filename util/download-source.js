@@ -80,7 +80,12 @@ module.exports = function(options) {
         apiUrl = genMongooseModelApi;
     }
 
-    var mdfJson = this.mdf;
+    var mdfJson;
+    if (options.generator === 'expressRouter') {
+        mdfJson = {};
+    } else {
+        mdfJson = this.mdf;
+    }
 
     var tarGzFilename = 'download.tar.gz';
 
@@ -190,6 +195,14 @@ module.exports = function(options) {
         try {
             // TODO: Make this filename the default once all generators are ported to
             // the new streams model
+
+            // Client-side only generator, so we'll skip the download and unzip
+            // code. I first put this cb() in saveDownload() above, but the
+            // script still evaluated this callback.
+            if (options.generator === 'expressRouter') {
+                // Return control to yo
+                cb();
+            } else
             if (options.generator === 'angularController' ||
                 options.generator === 'angularRouter' ||
                 options.generator === 'angularService' ||
