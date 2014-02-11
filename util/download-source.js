@@ -91,7 +91,8 @@ module.exports = function(options) {
 
     // TODO: Make this filename the default once all generators are ported to
     // the new streams model
-    if (options.generator === 'angularController' ||
+    if (options.generator === 'angularApp' ||
+        options.generator === 'angularController' ||
         options.generator === 'angularRouter' ||
         options.generator === 'angularService' ||
         options.generator === 'angularView' ||
@@ -205,7 +206,8 @@ module.exports = function(options) {
                 // Return control to yo
                 cb();
             } else
-            if (options.generator === 'angularController' ||
+            if (options.generator === 'angularApp' ||
+                options.generator === 'angularController' ||
                 options.generator === 'angularRouter' ||
                 options.generator === 'angularService' ||
                 options.generator === 'angularView' ||
