@@ -87,21 +87,23 @@ module.exports = function(options) {
         mdfJson = this.mdf;
     }
 
-    var tarGzFilename = 'download.tar.gz';
+//    var tarGzFilename = 'download.tar.gz';
+    var tarGzFilename = 'download.zip';
 
-    // TODO: Make this filename the default once all generators are ported to
-    // the new streams model
-    if (options.generator === 'angularApp' ||
-        options.generator === 'angularController' ||
-        options.generator === 'angularRouter' ||
-        options.generator === 'angularService' ||
-        options.generator === 'angularView' ||
-        options.generator === 'api' ||
-        options.generator === 'expressController' ||
-        options.generator === 'expressView' ||
-        options.generator === 'mongooseModel') {
-        tarGzFilename = 'download.zip';
-    }
+//    // TODO: Make this filename the default once all generators are ported to
+//    // the new streams model
+//    if (options.generator === 'project' ||
+//        options.generator === 'angularApp' ||
+//        options.generator === 'angularController' ||
+//        options.generator === 'angularRouter' ||
+//        options.generator === 'angularService' ||
+//        options.generator === 'angularView' ||
+//        options.generator === 'api' ||
+//        options.generator === 'expressController' ||
+//        options.generator === 'expressView' ||
+//        options.generator === 'mongooseModel') {
+//        tarGzFilename = 'download.zip';
+//    }
 
     options._eMkDirs.apply(this, [[
         '.exponential',
@@ -206,7 +208,8 @@ module.exports = function(options) {
                 // Return control to yo
                 cb();
             } else
-            if (options.generator === 'angularApp' ||
+            if (options.generator === 'project' ||
+                options.generator === 'angularApp' ||
                 options.generator === 'angularController' ||
                 options.generator === 'angularRouter' ||
                 options.generator === 'angularService' ||
