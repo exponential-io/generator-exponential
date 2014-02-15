@@ -7,7 +7,7 @@
 
 module.exports = function() {
     /* The mdf object is structured as follows:
-    ```javascript
+    javascript
     var mdf = {
         project: {
             name: {string},
@@ -94,82 +94,91 @@ module.exports = function() {
                     extension: 'html'
                 }
             },
+            accounts: {
+                facebook: false,
+                github: false,
+                google: false,
+                oauth: false,
+                password: true,
+                twitter: false
+            }
         },
         app: {Object},
         module: {Object},
     };
-    ``` */
+     */
 
-    // ## `mdf`
+    // ## mdf
     // Namespace for all Module Definition File (MDF) settings including
     // project, app(s) and module(s).
-    var mdf = {};
+    var mdf = {
+        project: {},
+        app: {},
+        module: {}
+    };
 
-    // ## `project`
-    // Namespace for all project settings.
-    mdf.project = {};
-
-    // ## `mdf.project.name`
+    // mdf.project.name
+    // ----------------
     // Project name
     mdf.project.name = 'Exponential';
 
-    // ## `mdf.project.directoryName`
+    // ## mdf.project.directoryName
     // Name of the project's directory.
     mdf.project.directoryName = mdf.project.name.toLowerCase();
 
-    // ## `mdf.project.description`
+    // ## mdf.project.description
     // Description of your project that is included in the project's
-    // `package.json` file.
+    // package.json file.
     mdf.project.description = 'Basic Exponential app';
 
-    // ## `mdf.project.repo`
+    // ## mdf.project.repo
     // URL to the project's repo on Github.
     mdf.project.repo = 'http://github.com/pathToYourRepo.git';
 
-    // ## `mdf.project.author`
+    // ## mdf.project.author
     // Name of the person or company who is generating this module's code
     mdf.project.author = 'Akbar S. Ahmed';
 
-    // ## `mdf.project.company`
+    // ## mdf.project.company
     // The name of your company
     mdf.project.company = 'Exponential.io';
 
-    // ## `mdf.project.copyright`
+    // ## mdf.project.copyright
     // Copyright string to display in source code and at the bottom of pages
     mdf.project.copyright = 'Copyright &copy; 2014 ' + mdf.project.company + ' All rights reserved.';
 
-    // `mdf.project.website`
+    // mdf.project.website
     // Website name
     mdf.project.website = 'Exponential.io';
 
-    // ## `mdf.project.adminEmail`
+    // ## mdf.project.adminEmail
     // Email of the website admin
     mdf.project.adminEmail = 'feedback@exponential.io';
 
     mdf.project.google = {};
 
-    // ## `mdf.project.google.trackingId`
+    // ## mdf.project.google.trackingId
     // Google Analytics Tracking Id
     mdf.project.google.trackingId = 'UA-47311952-1';
 
-    // ## `mdf.project.google.website`
+    // ## mdf.project.google.website
     // Google Analytics website
     mdf.project.google.website = 'exponential.io';
 
-    // ## `mdf.project.tabSize`
+    // ## mdf.project.tabSize
     // Set a default number of spaces per tab. The most common values are 2 and
     // 4.
     mdf.project.tabSize = 4;
 
-    // ## `mdf.project.generateComments`
+    // ## mdf.project.generateComments
     // If true, include comments in generated source code.
     mdf.project.generateComments = true;
 
-    // ## `mdf.project.express`
+    // ## mdf.project.express
     // Namespace for default Express settings.
     mdf.project.express = {};
 
-    // ## ``
+    // ## 
     //
     mdf.project.express.controllers = {
         filename: {
@@ -187,7 +196,7 @@ module.exports = function() {
         extension: 'js'
     };
 
-    // ## ``
+    // ## 
     //
     mdf.project.express.views = {
         filename: {
@@ -199,11 +208,11 @@ module.exports = function() {
         extension: 'hbs'
     };
 
-    // ## `mdf.project.api`
+    // ## mdf.project.api
     // Namespace for default API settings.
     mdf.project.api = {};
 
-    // ## ``
+    // ## 
     //
     mdf.project.api.controllers = {
         filename: {
@@ -221,25 +230,25 @@ module.exports = function() {
         extension: 'js'
     };
 
-    // ## ``
+    // ## 
     //
     mdf.project.api.routers = {};
 
-    // ## ``
+    // ## 
     //
     mdf.project.api.routers = {
         filenamePostfix: '-api',
         extension: 'js'
     };
 
-    // ## `mdf.project.angular`
+    // ## mdf.project.angular
     // Namespace for default Angular settings.
     mdf.project.angular = {};
 
-    // ## ``
+    // ## 
     //
     mdf.project.angular.controllers = {
-        // ### `filename`
+        // ### filename
         // File names for Angular controllers.
         filename: {
             create: 'create-ctrl',
@@ -247,7 +256,7 @@ module.exports = function() {
             readAll: 'read-all-ctrl',
             update: 'update-ctrl'
         },
-        // ### `objectNamePostfix`
+        // ### objectNamePostfix
         // Text to append to each Angular Controller object which is referenced
         // in Angular source.
         objectNamePostfix: {
@@ -259,10 +268,10 @@ module.exports = function() {
         extension: 'js'
     };
 
-    // ## `mdf.project.angular.views`
+    // ## mdf.project.angular.views
     //
     mdf.project.angular.views = {
-        // ### `mdf.project.angular.views.filename`
+        // ### mdf.project.angular.views.filename
         // File names for Angular views.
         filename: {
             create: 'create-ctrl',
@@ -270,12 +279,49 @@ module.exports = function() {
             readAll: 'read-all-ctrl',
             update: 'update-ctrl'
         },
-        // ### `mdf.project.angular.views.extension`
+        // ### mdf.project.angular.views.extension
         // File name extension for Angular views.
         extension: 'html'
     };
 
-    // Return the `mdf.project` object so that these settings can be used in an
+    /**
+     * Namespace for account (Passport) configuration.
+     * @type {Object}
+     */
+    mdf.project.accounts = {};
+
+    /**
+     * Enable Facebook authentication in Passport.
+     * @type {boolean}
+     */
+    mdf.project.accounts.facebook = false;
+    /**
+     * Enable GitHub authentication in Passport.
+     * @type {boolean}
+     */
+    mdf.project.accounts.github = false;
+    /**
+     * Enable Google authentication in Passport.
+     * @type {boolean}
+     */
+    mdf.project.accounts.google = false;
+    /**
+     * Enable OAuth authentication in Passport.
+     * @type {boolean}
+     */
+    mdf.project.accounts.oauth = false;
+    /**
+     * Enable Password authentication in Passport.
+     * @type {boolean}
+     */
+    mdf.project.accounts.password = true;
+    /**
+     * Enable Twitter authentication in Passport.
+     * @type {boolean}
+     */
+    mdf.project.accounts.twitter = false;
+
+    // Return the mdf.project object so that these settings can be used in an
     // App MDF or Module MDF.
     return mdf.project;
 };

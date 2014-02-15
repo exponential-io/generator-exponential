@@ -10,13 +10,15 @@
 
 var util             = require('util'),
     _                = require('lodash'),
+    chalk            = require('chalk'),
     yeoman           = require('yeoman-generator'),
     _eGeneratorBase  = require('../util/generator-base'),
     _eLoadMdf        = require('../util/load-mdf'),
     _eMkDirs         = require('../util/mkdir'),
     rimraf           = require('rimraf'),
     _eDownloadSource = require('../util/download-source'),
-    _eConfig         = require('../util/config');
+    _eConfig         = require('../util/config'),
+    _eCleanup        = require('../util/cleanup-download-dir');
 
 
 var ExponentialProjectGenerator = module.exports = function ExponentialProjectGenerator() {
@@ -30,6 +32,12 @@ var ExponentialProjectGenerator = module.exports = function ExponentialProjectGe
 };
 
 util.inherits(ExponentialProjectGenerator, _eGeneratorBase);
+
+// Pre-cleanup downloadDir
+ExponentialProjectGenerator.prototype.preCleanup = _eCleanup;
+//ExponentialProjectGenerator.prototype.preCleanup = function preCleanup() {
+//    _eCleanup.apply(this, []);
+//};
 
 /** Generate the project skeleton files */
 ExponentialProjectGenerator.prototype.generateProject = function generateProject() {
@@ -162,23 +170,21 @@ ExponentialProjectGenerator.prototype.angularEntryPoints = function angularEntry
 
 /** Create the Index page */
 ExponentialProjectGenerator.prototype.indexPage = function indexPage() {
-//    // Server directory
-//    var gServer = this._eDir.download.src + 'server/';
-//
-//    // Common (shared) controllers, models, routers and views
-//    var gControllers = gServer + 'controllers/',
-//        gRouters     = gServer + 'routers/',
-//        gWebsite     = gServer + 'views/website/';
+    // Generator directories
+    var genServer         = this._eDir.download.src + 'server/',
+        genControllersWeb = genServer + 'controllers/website/',
+        genRouters        = genServer + 'routers/',
+        genViewsWeb       = genServer + 'views/website/';
 
-    // Generator routers directory
-    var genRouters = this._eDir.download.src + 'server/routers/';
+    // Project directories
+    var projectServer         = this._eDir.project.server,
+        projectControllersWeb = projectServer + 'controllers/website/',
+        projectRouters        = projectServer + 'routers/',
+        projectViewsWeb       = projectServer + 'views/website/';
 
-    // Project routers directory
-    var projectRouters = this._eDir.project.server + 'routers/';
-
-    //this.copy(gControllers + 'index.js',  'server/controllers/index.js');
-    this.copy(genRouters     + 'website.js',  projectRouters + 'website.js');
-    //this.copy(gWebsite     + 'index.hbs', 'server/views/website/home.hbs');
+    this.copy(genControllersWeb + 'home.js', projectControllersWeb + 'home.js');
+    this.copy(genRouters + 'website.js', projectRouters + 'website.js');
+    this.copy(genViewsWeb + 'home.hbs',  projectViewsWeb + 'home.hbs');
 };
 
 /** Create the Accounts module */
@@ -234,6 +240,8 @@ ExponentialProjectGenerator.prototype.copyImages = function copyImages() {
     var projectClient = this._eDir.project.client,
         projectHome = projectClient + 'images/website/home/',
         projectIcons = projectClient + 'images/website/icons/';
+
+    this.copy(genClient + 'favicon.ico', projectClient + 'favicon.ico');
 
     this.copy(genHome + 'angular-source.png',  projectHome + 'angular-source.png');
     this.copy(genHome + 'node-source.png',     projectHome + 'node-source.png');
@@ -334,10 +342,32 @@ ExponentialProjectGenerator.prototype.setupHeroku = function setupHeroku() {
 };
 
 /** Cleanup downloadDir */
-ExponentialProjectGenerator.prototype.cleanupDownloadDir = function cleanupDownloadDir() {
-    rimraf(this._eDir.download.root, function(err) {
-        if (err) {
-            console.log(err);
-        }
-    });
+ExponentialProjectGenerator.prototype.cleanupDownloadDir = _eCleanup;
+
+// Next steps message
+ExponentialProjectGenerator.prototype.nextSteps = function nextSteps() {
+    console.log('');
+    console.log('');
+    console.log(chalk.blue.bold('Exponential.io - Build better apps faster with less effort.'));
+    console.log('');
+    console.log('');
+    console.log(chalk.blue.bold.underline('Next steps'));
+    console.log('1. Install npm packages.');
+    console.log('   ', chalk.green.bold('npm install'));
+    console.log('2. Start the Express server.');
+    console.log('   ', chalk.green.bold('grunt server'));
+    console.log('');
+    console.log(chalk.blue.bold.underline('Notes'));
+    console.log('1. If you get an npm error during installation, then just run');
+    console.log('   ', chalk.green.bold('npm install'), 'again.');
+    console.log('2. If you get repeat npm errors, then run the following commands:');
+    console.log('   ', chalk.green.bold('npm cache clean'));
+    console.log('   ', chalk.green.bold('npm install'));
+    console.log('3. If you are prompted by Bower to select an Angular version,');
+    console.log('   then select any Angular version >= 1.2.3.');
+    console.log('');
+    console.log('');
+    console.log('Thank you for using the Exponential.io beta.');
+    console.log('');
+    console.log('');
 };
