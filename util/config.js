@@ -36,7 +36,6 @@ var Config = module.exports = function Config() {
         config = JSON.parse(contents);
         self._eEmail = config.email;
         self._ePassword = config.password;
-
         cb();
     }
 

@@ -294,7 +294,7 @@ module.exports = function() {
      * Enable Facebook authentication in Passport.
      * @type {boolean}
      */
-    mdf.project.accounts.facebook = false;
+    mdf.project.accounts.facebook = true;
     /**
      * Enable GitHub authentication in Passport.
      * @type {boolean}

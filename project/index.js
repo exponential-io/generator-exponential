@@ -100,9 +100,6 @@ ExponentialProjectGenerator.prototype.setupExpress = function setupExpress() {
         _layouts     = _views  + 'layouts/',
         _partials    = _views  + 'partials/';
 
-    console.log()
-    console.log(this._eDir.download.src);
-
     // Main server.js
     this.copy(_server + 'server.js', this._eDir.project.server + 'server.js');
 

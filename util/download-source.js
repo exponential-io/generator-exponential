@@ -124,20 +124,54 @@ module.exports = function(options) {
 
         if(!err && resp.statusCode === 200) {
             // Login
-            var login = request({
-                    method: 'POST',
-                    url: loginApi,
-                    headers: {
-                        'x-xsrf-token': xsrfToken
+
+            // About the error
+            // When I get a login error both email and password are undefined
+            // email undefined | password undefined
+            //
+            // Solution
+            // This is a dirty hack of a solution. There is something odd
+            // where a race condition is sometimes causing a null email/password
+            // to be sent to the server, which causes the login to fail. This
+            // hack simply delays by 1 sec to adjust for the race condition.
+            // However, this will be solved before the Exponential.io 1.0
+            // release.
+            if (typeof self._eEmail === 'undefined' || typeof self._ePassword === 'undefined') {
+                setTimeout(function() {
+                    console.log('Correcting for known bug that will be fixed');
+                    console.log('before the 1.0 release.');
+
+                    var login = request({
+                            method: 'POST',
+                            url: loginApi,
+                            headers: {
+                                'x-xsrf-token': xsrfToken
+                            },
+                            json: {
+                                'email': self._eEmail,
+                                'password': self._ePassword,
+                                'rememberme': true
+                            }
+                        },
+                        verifyLogin
+                    );
+                }, 1000);
+            } else {
+                var login = request({
+                        method: 'POST',
+                        url: loginApi,
+                        headers: {
+                            'x-xsrf-token': xsrfToken
+                        },
+                        json: {
+                            'email': self._eEmail,
+                            'password': self._ePassword,
+                            'rememberme': true
+                        }
                     },
-                    json: {
-                        'email': self._eEmail,
-                        'password': self._ePassword,
-                        'rememberme': true
-                    }
-                },
-                verifyLogin
-            );
+                    verifyLogin
+                );
+            }
         }
     }
 
@@ -153,13 +187,6 @@ module.exports = function(options) {
 
         // Unauthorized
         if(resp.statusCode === 401) {
-            // TODO: THIS IS DEBUG CODE. REMOVE IT BEFORE RELEASE.
-            // TODO: THIS IS DEBUG CODE. REMOVE IT BEFORE RELEASE.
-            console.log('email ' + self._eEmail);
-            console.log('password ' + self._ePassword);
-            // TODO: THIS IS DEBUG CODE. REMOVE IT BEFORE RELEASE.
-            // TODO: THIS IS DEBUG CODE. REMOVE IT BEFORE RELEASE.
-
             console.log('Username and/or password is incorrect.');
         }
 
