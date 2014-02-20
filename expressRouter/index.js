@@ -6,9 +6,7 @@
  */
 'use strict';
 
-
 var _                = require('lodash'),
-    colors          = require('colors'),
     util             = require('util'),
     _eInject         = require('../util/inject'),
     _eGeneratorBase  = require('../util/generator-base'),
@@ -16,7 +14,8 @@ var _                = require('lodash'),
     _eMkDirs         = require('../util/mkdir'),
     rimraf           = require('rimraf'),
     _eDownloadSource = require('../util/download-source'),
-    _eConfig         = require('../util/config');
+    _eConfig         = require('../util/config'),
+    _eCleanup        = require('../util/cleanup-download-dir');
 
 
 var expressRouterGenerator = module.exports = function expressRouterGenerator() {
@@ -30,6 +29,9 @@ var expressRouterGenerator = module.exports = function expressRouterGenerator() 
 };
 
 util.inherits(expressRouterGenerator, _eGeneratorBase);
+
+// Pre-cleanup downloadDir
+expressRouterGenerator.prototype.preCleanup = _eCleanup;
 
 /** Download the source files */
 expressRouterGenerator.prototype.generateSrc = function generateSrc() {
@@ -48,9 +50,9 @@ expressRouterGenerator.prototype.injectRouter = function injectRouter() {
         moduleNameUs = this.mdf.module.name.upperSingular,
         moduleNameLs = this.mdf.module.name.lowerSingular;
 
-    if (this.mdf.module.express.use) {
-        router = 'server/routers/' + this.mdf.app.express.router.filename + '.js';
-    }
+    //if (this.mdf.module.express.use) {
+    router = 'server/routers/' + this.mdf.app.express.router.filename + '.js';
+    //}
 
     if (this.mdf.module.express.create.use) {
         url = this.mdf.module.express.create.url;

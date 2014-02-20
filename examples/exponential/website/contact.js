@@ -22,113 +22,54 @@ module.exports = function(_) {
         project: require('../project')(),
         app: require('./app')(),
         module: {
-            urlBase: '',
+            name: {},
             angular: {
-                use: false,
-                template: '',
-                controllers: {
-                    create: '',
-                    readAll: '',
-                    readOne: '',
-                    update: ''
-                },
-                module: '',
-                service: ''
+                controllers: {}
             },
-            api: {
-                use: false,
-                template: ''
-            },
-            express: {
-                use: true,
-                template: 'website',
-                create: {
-                    use: true,
-                    url: '/contact',
-                    title: 'Contact Exponential.io',
-                    view: {
-                        path: 'website',
-                        filename: 'contact-create',
-                        extension: '.hbs'
-                    },
-                    controller: {
-                        path: 'website',
-                        filename: 'contact-create',
-                        extension: '.js'
-                    },
-                    nextPage: {
-                        url: '/',
-                        view: 'website/home',
-                        message: 'Thank you for contacting us. We will reply within 24 hours.'
-                    }
-                },
-                readAll: {
-                    use: false
-                },
-                readOne: {
-                    use: false
-                },
-                update: {
-                    use: false
-                }
-            },
-            name: {
-                upperPlural: '',
-                lowerPlural: '',
-                upperSingular: '',
-                lowerSingular: ''
-            },
-            schema: {
-                name: '',
-                collectMetrics: true,
-                options: {},
-                fields: [],
-                indexes: []
-            },
+            api: {},
+            express: {},
+            schema: {},
             model: {
-                name: {
-                    upperPlural: '',
-                    lowerPlural: '',
-                    upperSingular: '',
-                    lowerSingular: ''
-                },
-                id: ''
+                name: {}
             }
         }
     };
 
-    // Module name examples
-    //
-    // Variable                        : Example
-    // --------------------------------:-----------
-    // mdf.module.name.upperPlural     : Customers
-    // mdf.module.name.lowerPlural     : customers
-    // mdf.module.name.lowerSingular   : customer
+    // -------------------------------------------------------------------------
+    // Module (3 settings)
+    // -------------------------------------------------------------------------
 
-    /**
-     * Module name upperPlural is to create JSDoc comments.
-     * @type {string}
-     */
-    mdf.module.name.upperPlural = 'Contacts';
+    // Module name upperPlural is to create JSDoc comments.
+    // Module name lower plural is used to create URLs in the routes file and to
+    // name the controller file.
+    // Module name upper singular is used to name the model.
+    // Module name lower singular used in the routes file. Used as the model file name.
 
-    /**
-     * Module name lower plural is used to create URLs in the routes file and to
-     * name the controller file.
-     * @type {string}
-     */
-    mdf.module.name.lowerPlural = 'contacts';
-
-    /**
-     * Module name upper singular is used to name the model.
-     * @type {string}
-     */
+    // 1. mdf.module.name.upperPlural
+    // 2. mdf.module.name.upperSingular
+    mdf.module.name.upperPlural   = 'Contacts';
     mdf.module.name.upperSingular = 'Contact';
 
-    /**
-     * Used in the routes file. Used as the model file name.
-     * @type {string}
-     */
-    mdf.module.name.lowerSingular = 'contact';
+    // Do not edit. Auto-created values.
+    mdf.module.name.lowerPlural   = mdf.module.name.upperPlural.toLowerCase();
+    mdf.module.name.lowerSingular = mdf.module.name.upperSingular.toLowerCase();
+
+
+
+    // 3. Set the path to the module's files (server/controllers/, server/views/,
+    //    or client/ is prepended)
+    mdf.module.path = 'website/contacts';
+    mdf.module.urlBase = mdf.module.path; // TODO: Replace urlBase with baseHref
+    mdf.module.baseHref = mdf.module.path;
+
+    // -------------------------------------------------------------------------
+    // Angular
+    // -------------------------------------------------------------------------
+
+    // =========================================================================
+    // EACH POSTFIX BELOW SHOULD NOT COME FROM project.js
+    // THESE ARE THE OBJECT NAMES BELOW
+    // =========================================================================
 
     /**
      * Name of the Angular Create controller.
@@ -166,6 +107,52 @@ module.exports = function(_) {
      * @type {string}
      */
     mdf.module.angular.service = mdf.module.name.lowerPlural + 'Srv';
+
+    // -------------------------------------------------------------------------
+    // Express (6 settings)
+    // -------------------------------------------------------------------------
+
+    // 1. Pick a template
+    mdf.module.express.template = 'crud-forms';
+
+    // 2. Enable and configure the create action
+    mdf.module.express.create = {
+        use: true,
+        url: '',
+        title: ''
+    };
+
+    // 3. Enable and configure the read-all action
+    mdf.module.express.readAll = {
+        use: false,
+        url: '',
+        title: ''
+    };
+
+    // 4. Enable and configure the read-one action
+    mdf.module.express.readOne = {
+        use: false,
+        url: '',
+        title: ''
+    };
+
+    // 5. Enable and configure the update action
+    mdf.module.express.update = {
+        use: false,
+        url: '',
+        title: ''
+    };
+
+    // 6. Enable and configure the delete action
+    mdf.module.express.delete = {
+        use: false,
+        url: '',
+        title: ''
+    };
+
+    // -------------------------------------------------------------------------
+    // Schema
+    // -------------------------------------------------------------------------
 
     // Schema sets the name of the schema object used in the module's model and
     // contains an array of keys.

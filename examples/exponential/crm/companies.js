@@ -1,159 +1,125 @@
-/**
- * Basic Module Definition Format (MDF). Do not confuse an Exponential module
- * with a Node module. An Exponential module refers to a modular feature within
- * your application, while a Node module refers to a chunk of code that has its
- * own scope.
- *
- * An MDF file is comprised of several sections:
- * <ul>
- * <li>project: Information about the overall project, including the package
- *     name. Projects contain 1 or more apps.</li>
- * <li>app: Information about an individual application, such as a CRM
- *     application. Each application has 1 or more modules. Basically, an app
- *     groups related modules into a solution to customer problems.</li>
- * <li>module: A module is a discrete unit of functionality. In a CRM
- *     application, there are a number of modules including the `Companies`
- *     module, the `Contacts` module, the `Opportunities` module, and so on.
- *     </li>
- * </ul>
- *
- * @module mdf/crm/companies
- * @exports mdf
- */
 'use strict';
 
 module.exports = function(_) {
-    /**
-     * Module Definition Format (ADF) is an object that contains all
-     * app and/or module configuration. Use this object to define the entire mdf
-     * object structure and to define default values.
-     *
-     * @type {Object}
-     */
+//    var mdf = {
+//        project: require('../project')(),
+//        app: require('./app')(),
+//        /**
+//         * MDF module definition
+//         * @namespace
+//         * @memberof mdf
+//         */
+//        module: {
+//            urlBase: '',
+//            /**
+//             * @namespace
+//             * @memberof mdf.module
+//             */
+//            navbar: {},
+//            /** @namespace */
+//            angular: {
+//                use: true,
+//                template: 'crud-forms',
+//                /** @namespace */
+//                controllers: {
+//                    create: '',
+//                    readAll: '',
+//                    readOne: '',
+//                    update: ''
+//                },
+//                module: '',
+//                service: ''
+//            },
+//            api: {
+//                use: true,
+//                template: 'crud-forms'
+//            },
+//            express: {
+//                use: false
+//            },
+//            website: {
+//                use: false
+//            },
+//            /** @namespace */
+//            name: {
+//                upperPlural: '',
+//                lowerPlural: '',
+//                upperSingular: '',
+//                lowerSingular: ''
+//            },
+//            schema: {
+//                name: '',
+//                collectMetrics: true,
+//                options: {},
+//                fields: [],
+//                indexes: []
+//            },
+//            model: {
+//                name: {
+//                    upperPlural: '',
+//                    lowerPlural: '',
+//                    upperSingular: '',
+//                    lowerSingular: ''
+//                },
+//                id: ''
+//            }
+//        }
+//    };
 
-    /** @namespace */
     var mdf = {
         project: require('../project')(),
         app: require('./app')(),
-        /**
-         * MDF module definition
-         * @namespace
-         * @memberof mdf
-         */
         module: {
-            urlBase: '',
-            /**
-             * @namespace
-             * @memberof mdf.module
-             */
+            name: {},
             navbar: {},
-            /** @namespace */
             angular: {
-                use: true,
-                template: 'crud-forms',
-                /** @namespace */
-                controllers: {
-                    create: '',
-                    readAll: '',
-                    readOne: '',
-                    update: ''
-                },
-                module: '',
-                service: ''
+                controllers: {}
             },
-            api: {
-                use: true,
-                template: 'crud-forms'
-            },
-            express: {
-                use: false
-            },
-            website: {
-                use: false
-            },
-            /** @namespace */
-            name: {
-                upperPlural: '',
-                lowerPlural: '',
-                upperSingular: '',
-                lowerSingular: ''
-            },
-            schema: {
-                name: '',
-                collectMetrics: true,
-                options: {},
-                fields: [],
-                indexes: []
-            },
+            api: {},
+            express: {},
+            schema: {},
             model: {
-                name: {
-                    upperPlural: '',
-                    lowerPlural: '',
-                    upperSingular: '',
-                    lowerSingular: ''
-                },
-                id: ''
+                name: {}
             }
         }
     };
 
-    /**
-     * urlBase is used to create the child URL for this module within the app
-     * (parent) and to name the directory that contains the
-     * Angular app files. For example, a 'blog' urlBase within the admin app
-     * has a url of '/admin/blog' and the Angular views for the blog app will
-     * be placed in 'client/admin/views/blog'.
-     *
-     * @type {string}
-     */
-    mdf.module.urlBase = 'companies';
+    // -------------------------------------------------------------------------
+    // Module (3 settings)
+    // -------------------------------------------------------------------------
 
-    /**
-     * If true, a link to the module is inserted into the app's navbar.
-     * @type {boolean}
-     */
-    mdf.module.navbar.display = true;
-
-    /**
-     * Label text to display in the navbar menu. Label is only shown if display
-     * is true.
-     *
-     * @type {string}
-     */
-    mdf.module.navbar.label = 'Companies';
-
-    // Module name examples
-    //
-    // Variable                        : Example
-    // --------------------------------:-----------
-    // mdf.module.name.upperPlural     : Customers
-    // mdf.module.name.lowerPlural     : customers
-    // mdf.module.name.lowerSingular   : customer
-
-    /**
-     * Module name upperPlural is to create JSDoc comments.
-     * @type {string}
-     */
-    mdf.module.name.upperPlural = 'Companies';
-
-    /**
-     * Module name lower plural is used to create URLs in the routes file and to
-     * name the controller file.
-     * @type {string}
-     */
-    mdf.module.name.lowerPlural = 'companies';
-
-    /**
-     * Module name upper singular is used to name the model.
-     * @type {string}
-     */
+    // 1.
+    // 2.
+    mdf.module.name.upperPlural   = 'Companies';
     mdf.module.name.upperSingular = 'Company';
 
-    /**
-     * Used in the routes file. Used as the model file name.
-     * @type {string}
-     */
-    mdf.module.name.lowerSingular = 'company';
+    // 3. Set the path to the module's files (server/controllers/, server/views/,
+    //    or client/ is prepended)
+    mdf.module.path = 'companies';
+
+    // 4.
+    mdf.module.navbar.display = true;
+
+
+    // The remaining module settings are auto-generated values. Do NOT edit
+    // unless you require detailed customization and know how these settings
+    // affect your code.
+    mdf.module.name.lowerPlural   = mdf.module.name.upperPlural.toLowerCase();
+    mdf.module.name.lowerSingular = mdf.module.name.upperSingular.toLowerCase();
+
+    mdf.module.urlBase = mdf.module.path; // TODO: Replace urlBase with baseHref
+    mdf.module.baseHref = mdf.module.path;
+
+    mdf.module.navbar.label = mdf.module.name.upperPlural;
+
+
+    // -------------------------------------------------------------------------
+    // Angular
+    // -------------------------------------------------------------------------
+
+    // TODO: ANGULAR
+    // TODO: ANGULAR
+    // TODO: ANGULAR
 
     /**
      * Name of the Angular Create controller.
@@ -198,6 +164,57 @@ module.exports = function(_) {
 
     // Schema sets the name of the schema object used in the module's model and
     // contains an array of keys.
+
+    // -------------------------------------------------------------------------
+    // Express (6 settings)
+    // -------------------------------------------------------------------------
+
+    // 1. Pick a template
+    mdf.module.express.template = 'crud-forms';
+
+    // 2. Enable and configure the create action
+    mdf.module.express.create = {
+        use: true,
+        url: '',
+        title: 'Add Company'
+    };
+
+    // 3. Enable and configure the read-all action
+    mdf.module.express.readAll = {
+        use: true,
+        url: '',
+        title: 'Companies'
+    };
+
+    // 4. Enable and configure the read-one action
+    mdf.module.express.readOne = {
+        use: true,
+        url: '',
+        title: 'Company Details'
+    };
+
+    // 5. Enable and configure the update action
+    mdf.module.express.update = {
+        use: true,
+        url: '',
+        title: 'Update Company'
+    };
+
+    // 6. Enable and configure the delete action
+    mdf.module.express.delete = {
+        use: true,
+        url: '',
+        title: 'Delete Company'
+    };
+
+
+    // -------------------------------------------------------------------------
+    // Schema
+    // -------------------------------------------------------------------------
+
+    // TODO: SCHEMA
+    // TODO: SCHEMA
+    // TODO: SCHEMA
 
     /**
      * Name of the schema object used in the module's model.

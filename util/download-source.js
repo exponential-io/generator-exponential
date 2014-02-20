@@ -215,6 +215,7 @@ module.exports = function(options) {
         // Download and unzip the project skel files (which are
         // sent by the server as a zip file.
         if (!err && resp.statusCode === 200) {
+
             fs.writeFile(self._eDir.download.root + tarGzFilename,
                 body,
                 extractDownload
@@ -245,6 +246,7 @@ module.exports = function(options) {
                 options.generator === 'expressController' ||
                 options.generator === 'expressView' ||
                 options.generator === 'mongooseModel') {
+
                 var zip = new Zip(self._eDir.download.root + tarGzFilename);
                 zip.extractAllTo(self._eDir.download.root);
 

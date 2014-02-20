@@ -14,7 +14,8 @@ var util             = require('util'),
     _eMkDirs         = require('../util/mkdir'),
     rimraf           = require('rimraf'),
     _eDownloadSource = require('../util/download-source'),
-    _eConfig         = require('../util/config');
+    _eConfig         = require('../util/config'),
+    _eCleanup        = require('../util/cleanup-download-dir');
 
 
 var expressViewGenerator = module.exports = function expressViewGenerator() {
@@ -28,6 +29,9 @@ var expressViewGenerator = module.exports = function expressViewGenerator() {
 };
 
 util.inherits(expressViewGenerator, _eGeneratorBase);
+
+// Pre-cleanup downloadDir
+expressViewGenerator.prototype.preCleanup = _eCleanup;
 
 /** Download the source files */
 expressViewGenerator.prototype.generateSrc = function generateSrc() {
