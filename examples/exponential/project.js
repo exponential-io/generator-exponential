@@ -176,7 +176,8 @@ module.exports = function() {
             readOne: 'read-one',
             readAll: 'read-all',
             update: 'update',
-            delete: 'delete'
+            delete: 'delete',
+            getItem: 'get-item'
         },
         objectNamePostfix: {
             create: 'CreateCtrl',
@@ -194,8 +195,7 @@ module.exports = function() {
             create: 'create',
             readOne: 'read-one',
             readAll: 'read-all',
-            update: 'update',
-            delete: 'delete'
+            update: 'update'
         },
         extension: 'hbs'
     };
@@ -211,7 +211,8 @@ module.exports = function() {
             readOne: 'read-one-api-ctrl',
             readAll: 'read-all-api-ctrl',
             update: 'update-api-ctrl',
-            delete: 'delete-api-ctrl'
+            delete: 'delete-api-ctrl',
+            getItem: 'get-item-api-ctrl'
         },
         objectNamePostfix: {
             create: 'CreateApiCtrl',

@@ -50,13 +50,6 @@ expressControllerGenerator.prototype.createDirs = function createDirs() {
 
 /** Create the Express controller(s) */
 expressControllerGenerator.prototype.createController = function createController() {
-    // Shortcuts to the MDF controller definitions
-//    var mdfCreateCtrl  = this.mdf.module.express.create.controller,
-//        mdfReadAllCtrl = this.mdf.module.express.readAll.controller,
-//        mdfReadOneCtrl = this.mdf.module.express.readOne.controller,
-//        mdfUpdateCtrl  = this.mdf.module.express.update.controller,
-//        mdfUpdateCtrl  = this.mdf.module.express.delete.controller;
-
     var filename = this.mdf.project.express.controllers.filename,
         extension = '.' + this.mdf.project.express.controllers.extension;
 
@@ -67,7 +60,8 @@ expressControllerGenerator.prototype.createController = function createControlle
         genReadOneCtrlFile = genControllersPath + filename.readOne + extension,
         genReadAllCtrlFile = genControllersPath + filename.readAll + extension,
         genUpdateCtrlFile  = genControllersPath + filename.update  + extension,
-        genDeleteCtrlFile  = genControllersPath + filename.delete  + extension;
+        genDeleteCtrlFile  = genControllersPath + filename.delete  + extension,
+        genGetItemCtrlFile = genControllersPath + filename.getItem  + extension;
 
     var projectControllersPath = this._eDir.project.server +
                                  'controllers/' + this.mdf.module.path + '/';
@@ -76,7 +70,8 @@ expressControllerGenerator.prototype.createController = function createControlle
         projectReadOneCtrlFile = projectControllersPath + filename.readOne + extension,
         projectReadAllCtrlFile = projectControllersPath + filename.readAll + extension,
         projectUpdateCtrlFile  = projectControllersPath + filename.update  + extension,
-        projectDeleteCtrlFile  = projectControllersPath + filename.delete  + extension;
+        projectDeleteCtrlFile  = projectControllersPath + filename.delete  + extension,
+        projectGetItemCtrlFile = projectControllersPath + filename.getItem + extension;
 
     if (this.mdf.module.express.create.use) {
         this.copy(genCreateCtrlFile, projectCreateCtrlFile);
@@ -96,6 +91,10 @@ expressControllerGenerator.prototype.createController = function createControlle
 
     if (this.mdf.module.express.delete.use) {
         this.copy(genDeleteCtrlFile, projectDeleteCtrlFile);
+    }
+
+    if (this.mdf.module.express.update.use || this.mdf.module.express.delete.use) {
+        this.copy(genGetItemCtrlFile, projectGetItemCtrlFile);
     }
 };
 
