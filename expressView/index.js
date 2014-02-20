@@ -6,13 +6,11 @@
  */
 'use strict';
 
-
 var util             = require('util'),
     _                = require('lodash'),
     _eGeneratorBase  = require('../util/generator-base'),
     _eLoadMdf        = require('../util/load-mdf'),
     _eMkDirs         = require('../util/mkdir'),
-    rimraf           = require('rimraf'),
     _eDownloadSource = require('../util/download-source'),
     _eConfig         = require('../util/config'),
     _eCleanup        = require('../util/cleanup-download-dir');
@@ -88,11 +86,3 @@ expressViewGenerator.prototype.createView = function createView() {
 
 /** Cleanup downloadDir */
 expressViewGenerator.prototype.cleanupDownloadDir = _eCleanup;
-
-//expressViewGenerator.prototype.cleanupDownloadDir = function cleanupDownloadDir() {
-//    rimraf(this._eDir.download.root, function(err) {
-//        if (err) {
-//            console.log(err);
-//        }
-//    });
-//};

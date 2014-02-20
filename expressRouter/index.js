@@ -7,6 +7,7 @@
 'use strict';
 
 var _                = require('lodash'),
+    chalk            = require('chalk'),
     util             = require('util'),
     _eInject         = require('../util/inject'),
     _eGeneratorBase  = require('../util/generator-base'),
@@ -41,116 +42,148 @@ expressRouterGenerator.prototype.generateSrc = function generateSrc() {
     }]);
 };
 
+expressRouterGenerator.prototype.copyRouter = function copyRouter() {
+    // Markdown for page header comment
+    this.h1Header = this.mdf.module.name.upperPlural + ' Router';
+    this.h1Md = new Array((this.h1Header + 1).length).join('=');
+
+    var genRouter = __dirname + '/../templates/' +
+                    this.mdf.module.express.template +
+                    '/express/routers/router.js';
+
+    this.router = 'server/routers/' + this.mdf.module.name.lowerPlural + '.js';
+
+    this.template(genRouter, this.router, this);
+};
+
 /** Router */
 expressRouterGenerator.prototype.injectRouter = function injectRouter() {
     var url = '',
         controller = '',
         router = '',
         routes = [],
+        moduleNameUp = this.mdf.module.name.upperPlural,
         moduleNameUs = this.mdf.module.name.upperSingular,
         moduleNameLs = this.mdf.module.name.lowerSingular;
 
-    //if (this.mdf.module.express.use) {
-    router = 'server/routers/' + this.mdf.app.express.router.filename + '.js';
-    //}
+    // Controllers
+    var controllersDir = '../controllers/' + this.mdf.module.path + '/',
+        ctrlFilename = this.mdf.project.express.controllers.filename;
 
-    if (this.mdf.module.express.create.use) {
-        url = this.mdf.module.express.create.url;
-        controller = this.mdf.module.express.create.controller.path + '/' + this.mdf.module.express.create.controller.filename;
+    var createController  = controllersDir + ctrlFilename.create,
+        readOneController = controllersDir + ctrlFilename.readOne,
+        readAllController = controllersDir + ctrlFilename.readAll,
+        updateController  = controllersDir + ctrlFilename.update,
+        deleteController  = controllersDir + ctrlFilename.delete,
+        getItemController = controllersDir + ctrlFilename.getItem;
 
-        routes = [
-            '    // ' + moduleNameUs,
-            '    var ' + moduleNameLs + ' = require(\'../controllers/' + controller + '\');',
-            '    app.get(\'' + url + '\',',
-            '        csrf.token,',
-            '        ' + moduleNameLs + '.render);',
-            '    app.post(\'' + url + '\',',
-            '        ' + moduleNameLs + '.create);',
-            ''
-        ];
+    // Get Item
+    if (this.mdf.module.express.readOne.use ||
+        this.mdf.module.express.update.use ||
+        this.mdf.module.express.delete.use) {
 
-        _eInject({
-            targetFile: router,
-            needle: '};',
-            splicable: routes,
-            appendComma: false
-        });
-        console.log('inject route '.green + router);
-    }
-
-    if (this.mdf.module.express.readAll.use) {
-        url = this.mdf.module.express.readAll.url;
-        controller = this.mdf.module.express.readAll.controller.path + '/' + this.mdf.module.express.readAll.controller.filename;
-
-        routes = [
-            '    // ' + moduleNameUs + ': read-all',
-            '    var ' + moduleNameLs + 'ReadAll = require(\'../controllers/' + controller + '\');',
-            '    app.get(\'' + url + '\',',
-            '        ' + moduleNameLs + 'ReadAll.render',
-            '    );',
-            ''
-        ];
-
-        _eInject({
-            targetFile: router,
-            needle: '};',
-            splicable: routes,
-            appendComma: false
-        });
-        console.log('inject route '.green + router);
-    }
-
-    if (this.mdf.module.express.readOne.use) {
-        url = this.mdf.module.express.readOne.url;
-        controller = this.mdf.module.express.readOne.controller.path + '/' + this.mdf.module.express.readOne.controller.filename;
-
-        routes = [
-            '    // ' + moduleNameUs + ': read-one',
-            '    var ' + moduleNameLs + 'ReadOne = require(\'../controllers/' + controller + '\');',
-            '    app.get(\'' + url + '\',',
-            '        ' + moduleNameLs + 'ReadOne.render',
-            '    );',
-            ''
-        ];
-
-        _eInject({
-            targetFile: router,
-            needle: '};',
-            splicable: routes,
-            appendComma: false
-        });
-        console.log('inject route '.green + router);
-    }
-
-    if (this.mdf.module.express.readOne.use || this.mdf.module.express.update.use) {
         var modelId = this.mdf.module.model.id;
-        controller = this.mdf.module.express.readOne.controller.path + '/' + this.mdf.module.express.readOne.controller.filename;
 
-        // TODO: getItem needs to be split into it's own file as it is shared by
-        //       readOne and update.
-        routes = [
+        routes = routes.concat([
             '    // Get the ' + modelId + ' param',
             '    app.param(\'' + modelId + '\',',
-            '        require(\'../controllers/' + controller + '\').getItem',
+            '        require(\'' + getItemController + '\').getItem',
             '    );',
             ''
-        ];
-
-        _eInject({
-            targetFile: router,
-            needle: '};',
-            splicable: routes,
-            appendComma: false
-        });
-        console.log('inject route '.green + router);
+        ]);
     }
+
+    // Create
+    if (this.mdf.module.express.create.use) {
+        var createUrl = this.mdf.module.express.create.url,
+            createCtrl = 'create' + moduleNameUs;
+
+        routes = routes.concat([
+            '    // Create ' + moduleNameUs,
+            '    var ' + createCtrl + ' = require(\'' + createController + '\');',
+            '    app.get(\'' + createUrl + '\',',
+            '        csrf.token,',
+            '        ' + createCtrl + '.render',
+            '    );',
+            '    app.post(\'' + createUrl + '\',',
+            '        ' + createCtrl + '.create',
+            '    );',
+            ''
+        ]);
+    }
+
+    // Read All
+    if (this.mdf.module.express.readAll.use) {
+        var readAllUrl = this.mdf.module.express.readAll.url,
+            readAllCtrl = 'readAll' + moduleNameUp;
+
+        routes = routes.concat([
+            '    // Read All ' + moduleNameUp,
+            '    var ' + readAllCtrl + '= require(\'' + readAllController + '\');',
+            '    app.get(\'' + readAllUrl + '\',',
+            '        ' + readAllCtrl + '.render',
+            '    );',
+            ''
+        ]);
+    }
+
+    // Read One
+    if (this.mdf.module.express.readOne.use) {
+        var readOneUrl = this.mdf.module.express.readOne.url,
+            readOneCtrl = 'readOne' + moduleNameUs;
+
+        routes = routes.concat([
+            '    // Read One ' + moduleNameUs,
+            '    var ' + readOneCtrl + ' = require(\'' + readOneController + '\');',
+            '    app.get(\'' + readOneUrl + '\',',
+            '        ' + readOneCtrl + '.render',
+            '    );',
+            ''
+        ]);
+    }
+
+    // Update
+    if (this.mdf.module.express.update.use) {
+        var updateUrl = this.mdf.module.express.update.url,
+            updateCtrl = 'update' + moduleNameUs;
+
+        routes = routes.concat([
+            '    // Update ' + moduleNameUs,
+            '    var ' + updateCtrl + ' = require(\'' + updateController + '\');',
+            '    app.get(\'' + updateUrl + '\',',
+            '        ' + updateCtrl + '.render',
+            '    );',
+            '    app.post(\'' + updateUrl + '\',',
+            '        ' + updateCtrl + '.update',
+            '    );',
+            ''
+        ]);
+    }
+
+    // Delete
+    if (this.mdf.module.express.delete.use) {
+        var deleteUrl = this.mdf.module.express.delete.url,
+            deleteCtrl = 'delete' + moduleNameUs;
+
+        routes = routes.concat([
+            '    // Delete ' + moduleNameUs,
+            '    var ' + deleteCtrl + ' = require(\'' + deleteController + '\');',
+            '    app.post(\'' + deleteUrl + '\',',
+            '        ' + deleteCtrl + '.remove',
+            '    );',
+            ''
+        ]);
+    }
+
+    // Inject the routes into the module's router
+    _eInject({
+        targetFile: this.router,
+        needle: '};',
+        splicable: routes,
+        appendComma: false
+    });
+    console.log(chalk.green('injected routes: '), this.router);
 };
 
 /** Cleanup downloadDir */
-expressRouterGenerator.prototype.cleanupDownloadDir = function cleanupDownloadDir() {
-    rimraf(this._eDir.download.root, function(err) {
-        if (err) {
-            console.log(err);
-        }
-    });
-};
+expressRouterGenerator.prototype.cleanupDownloadDir = _eCleanup;

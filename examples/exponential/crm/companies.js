@@ -114,6 +114,52 @@ module.exports = function(_) {
 
 
     // -------------------------------------------------------------------------
+    // Model (0 settings)
+    // -------------------------------------------------------------------------
+
+    // Model name examples
+    //
+    // Variable                            : Example
+    // ------------------------------------:-----------
+    // mdf.module.model.name.upperPlural   : Customers
+    // mdf.module.model.name.lowerPlural   : customers
+    // mdf.module.model.name.lowerSingular : customer
+    // mdf.module.model.id                 : customerId
+
+    /**
+     *
+     * @type {string}
+     */
+    mdf.module.model.name.upperPlural = mdf.module.name.upperPlural;
+
+    /**
+     * Model name lower plural is in a comment string in the Express controller
+     * and in Express controller's readAll() method.
+     * @type {string}
+     */
+    mdf.module.model.name.lowerPlural = mdf.module.name.lowerPlural;
+
+    /**
+     * Model name upper singular is used as the model name and as the variable
+     * name of the model constructor in the Express controller.
+     * @type {string}
+     */
+    mdf.module.model.name.upperSingular = mdf.module.name.upperSingular;
+
+    /**
+     * Model name lower singular is used as the model file name and as the
+     * variable name of the model instance in the Express controller.
+     * @type {string}
+     */
+    mdf.module.model.name.lowerSingular = mdf.module.name.lowerSingular;
+
+    /**
+     * Model id is used to track a model's primary key.
+     * @type {string}
+     */
+    mdf.module.model.id = mdf.module.model.name.lowerSingular + 'Id';
+
+    // -------------------------------------------------------------------------
     // Angular
     // -------------------------------------------------------------------------
 
@@ -175,35 +221,35 @@ module.exports = function(_) {
     // 2. Enable and configure the create action
     mdf.module.express.create = {
         use: true,
-        url: '',
+        url: '/companies/add',
         title: 'Add Company'
     };
 
     // 3. Enable and configure the read-all action
     mdf.module.express.readAll = {
         use: true,
-        url: '',
+        url: '/companies',
         title: 'Companies'
     };
 
     // 4. Enable and configure the read-one action
     mdf.module.express.readOne = {
         use: true,
-        url: '',
+        url: '/companies/:' + mdf.module.model.id,
         title: 'Company Details'
     };
 
     // 5. Enable and configure the update action
     mdf.module.express.update = {
         use: true,
-        url: '',
+        url: '/companies/edit/:' + mdf.module.model.id,
         title: 'Update Company'
     };
 
     // 6. Enable and configure the delete action
     mdf.module.express.delete = {
         use: true,
-        url: '',
+        url: '/companies/delete/:' + mdf.module.model.id,
         title: 'Delete Company'
     };
 
@@ -1131,48 +1177,6 @@ module.exports = function(_) {
             country: 1
         }
     ];
-
-    // Model name examples
-    //
-    // Variable                            : Example
-    // ------------------------------------:-----------
-    // mdf.module.model.name.upperPlural   : Customers
-    // mdf.module.model.name.lowerPlural   : customers
-    // mdf.module.model.name.lowerSingular : customer
-    // mdf.module.model.id                 : customerId
-
-    /**
-     *
-     * @type {string}
-     */
-    mdf.module.model.name.upperPlural = mdf.module.name.upperPlural;
-
-    /**
-     * Model name lower plural is in a comment string in the Express controller
-     * and in Express controller's readAll() method.
-     * @type {string}
-     */
-    mdf.module.model.name.lowerPlural = mdf.module.name.lowerPlural;
-
-    /**
-     * Model name upper singular is used as the model name and as the variable
-     * name of the model constructor in the Express controller.
-     * @type {string}
-     */
-    mdf.module.model.name.upperSingular = mdf.module.name.upperSingular;
-
-    /**
-     * Model name lower singular is used as the model file name and as the
-     * variable name of the model instance in the Express controller.
-     * @type {string}
-     */
-    mdf.module.model.name.lowerSingular = mdf.module.name.lowerSingular;
-
-    /**
-     * Model id is used to track a model's primary key.
-     * @type {string}
-     */
-    mdf.module.model.id = mdf.module.model.name.lowerSingular + 'Id';
 
     // In process workaround for schema type == String with an enum that calls
     // a function
