@@ -149,6 +149,7 @@ expressRouterGenerator.prototype.injectRouter = function injectRouter() {
             '    // Read One ' + moduleNameUs,
             '    var ' + readOneCtrl + ' = require(\'' + readOneController + '\');',
             '    app.get(\'' + readOneRoute + '\',',
+            '        csrf.token,',
             '        ' + readOneCtrl + '.render',
             '    );',
             ''
