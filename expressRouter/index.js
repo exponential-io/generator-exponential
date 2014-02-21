@@ -158,17 +158,17 @@ expressRouterGenerator.prototype.injectRouter = function injectRouter() {
 
     // Update
     if (this.mdf.module.express.update.use) {
-        var updateUrl = this.mdf.module.express.update.url,
+        var updateRoute = this.mdf.module.express.update.route,
             updateCtrl = 'update' + moduleNameUs;
 
         routes = routes.concat([
             '    // Update ' + moduleNameUs,
             '    var ' + updateCtrl + ' = require(\'' + updateController + '\');',
-            '    app.get(\'' + updateUrl + '\',',
+            '    app.get(\'' + updateRoute + '\',',
             '        csrf.token,',
             '        ' + updateCtrl + '.render',
             '    );',
-            '    app.post(\'' + updateUrl + '\',',
+            '    app.post(\'' + updateRoute + '\',',
             '        ' + updateCtrl + '.update',
             '    );',
             ''
@@ -177,13 +177,13 @@ expressRouterGenerator.prototype.injectRouter = function injectRouter() {
 
     // Delete
     if (this.mdf.module.express.delete.use) {
-        var deleteUrl = this.mdf.module.express.delete.url,
+        var deleteRoute = this.mdf.module.express.delete.route,
             deleteCtrl = 'delete' + moduleNameUs;
 
         routes = routes.concat([
             '    // Delete ' + moduleNameUs,
             '    var ' + deleteCtrl + ' = require(\'' + deleteController + '\');',
-            '    app.post(\'' + deleteUrl + '\',',
+            '    app.post(\'' + deleteRoute + '\',',
             '        ' + deleteCtrl + '.remove',
             '    );',
             ''

@@ -47,6 +47,7 @@ module.exports = function(options) {
         //genExpressAppApi    = prefix + 'exponential/express/app?c=' + cacheBuster,
         genExpressCtrlApi   = prefix + 'exponential/express/controller?c=' + cacheBuster,
         genExpressRouterApi = prefix + 'exponential/express/router?c=' + cacheBuster,
+        genExpressNavbarApi = prefix + 'exponential/express/navbar?c=' + cacheBuster,
         genExpressViewApi   = prefix + 'exponential/express/view?c=' + cacheBuster,
         genMongooseModelApi = prefix + 'exponential/mongoose/model?c=' + cacheBuster,
         apiUrl;
@@ -73,6 +74,8 @@ module.exports = function(options) {
         apiUrl = genExpressCtrlApi;
     } else if (options.generator === 'expressRouter') {
         apiUrl = genExpressRouterApi;
+    } else if (options.generator === 'expressNavbar') {
+        apiUrl = genExpressNavbarApi;
     } else if (options.generator === 'expressView') {
         apiUrl = genExpressViewApi;
     } else if (options.generator === 'mongooseModel') {
@@ -86,23 +89,7 @@ module.exports = function(options) {
         mdfJson = this.mdf;
     }
 
-//    var tarGzFilename = 'download.tar.gz';
     var tarGzFilename = 'download.zip';
-
-//    // TODO: Make this filename the default once all generators are ported to
-//    // the new streams model
-//    if (options.generator === 'project' ||
-//        options.generator === 'angularApp' ||
-//        options.generator === 'angularController' ||
-//        options.generator === 'angularRouter' ||
-//        options.generator === 'angularService' ||
-//        options.generator === 'angularView' ||
-//        options.generator === 'api' ||
-//        options.generator === 'expressController' ||
-//        options.generator === 'expressView' ||
-//        options.generator === 'mongooseModel') {
-//        tarGzFilename = 'download.zip';
-//    }
 
     options._eMkDirs.apply(this, [[
         '.exponential',
@@ -135,7 +122,9 @@ module.exports = function(options) {
             // hack simply delays by 1 sec to adjust for the race condition.
             // However, this will be solved before the Exponential.io 1.0
             // release.
-            if (typeof self._eEmail === 'undefined' || typeof self._ePassword === 'undefined') {
+            if (typeof self._eEmail === 'undefined' ||
+                typeof self._ePassword === 'undefined') {
+
                 setTimeout(function() {
                     console.log('Correcting for known bug that will be fixed');
                     console.log('before the 1.0 release.');
@@ -212,7 +201,9 @@ module.exports = function(options) {
         }
 
         // Return immediately as the Express Router is 100% client-side
-        if (options.generator === 'expressRouter') {
+        if (options.generator === 'expressRouter' ||
+            options.generator === 'expressNavbar') {
+
             // Return control to yo
             cb();
         } else if (!err && resp.statusCode === 200) {
@@ -229,21 +220,11 @@ module.exports = function(options) {
 
     function extractDownload(err) {
         try {
-//            // Client-side only generator, so we'll skip the download and unzip
-//            // code. I first put this cb() in saveDownload() above, but the
-//            // script still evaluated this callback...so, I need to figure out
-//            // where to put this cb() earlier in the logic flow so that we skip
-//            // all unnecessary code.
-//            if (options.generator === 'expressRouter') {
-//                // Return control to yo
-//                cb();
-//            } else {
-                var zip = new Zip(self._eDir.download.root + tarGzFilename);
-                zip.extractAllTo(self._eDir.download.root);
+            var zip = new Zip(self._eDir.download.root + tarGzFilename);
+            zip.extractAllTo(self._eDir.download.root);
 
-                // Return control to yo
-                cb();
-//            }
+            // Return control to yo
+            cb();
         } catch (err) {
             var errorMsg = 'Exponential encountered an error while ' +
                 'downloading the project skeleton files.';
