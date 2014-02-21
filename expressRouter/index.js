@@ -95,17 +95,17 @@ expressRouterGenerator.prototype.injectRouter = function injectRouter() {
 
     // Create
     if (this.mdf.module.express.create.use) {
-        var createUrl = this.mdf.module.express.create.url,
+        var createRoute = this.mdf.module.express.create.route,
             createCtrl = 'create' + moduleNameUs;
 
         routes = routes.concat([
             '    // Create ' + moduleNameUs,
             '    var ' + createCtrl + ' = require(\'' + createController + '\');',
-            '    app.get(\'' + createUrl + '\',',
+            '    app.get(\'' + createRoute + '\',',
             '        csrf.token,',
             '        ' + createCtrl + '.render',
             '    );',
-            '    app.post(\'' + createUrl + '\',',
+            '    app.post(\'' + createRoute + '\',',
             '        ' + createCtrl + '.create',
             '    );',
             ''
@@ -114,13 +114,13 @@ expressRouterGenerator.prototype.injectRouter = function injectRouter() {
 
     // Read All
     if (this.mdf.module.express.readAll.use) {
-        var readAllUrl = this.mdf.module.express.readAll.url,
+        var readAllRoute = this.mdf.module.express.readAll.route,
             readAllCtrl = 'readAll' + moduleNameUp;
 
         routes = routes.concat([
             '    // Read All ' + moduleNameUp,
             '    var ' + readAllCtrl + '= require(\'' + readAllController + '\');',
-            '    app.get(\'' + readAllUrl + '\',',
+            '    app.get(\'' + readAllRoute + '\',',
             '        ' + readAllCtrl + '.render',
             '    );',
             ''
@@ -129,13 +129,13 @@ expressRouterGenerator.prototype.injectRouter = function injectRouter() {
 
     // Read One
     if (this.mdf.module.express.readOne.use) {
-        var readOneUrl = this.mdf.module.express.readOne.url,
+        var readOneRoute = this.mdf.module.express.readOne.route,
             readOneCtrl = 'readOne' + moduleNameUs;
 
         routes = routes.concat([
             '    // Read One ' + moduleNameUs,
             '    var ' + readOneCtrl + ' = require(\'' + readOneController + '\');',
-            '    app.get(\'' + readOneUrl + '\',',
+            '    app.get(\'' + readOneRoute + '\',',
             '        ' + readOneCtrl + '.render',
             '    );',
             ''
