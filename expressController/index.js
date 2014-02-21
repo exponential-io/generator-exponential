@@ -60,8 +60,8 @@ expressControllerGenerator.prototype.createController = function createControlle
         genReadOneCtrlFile = genControllersPath + filename.readOne + extension,
         genReadAllCtrlFile = genControllersPath + filename.readAll + extension,
         genUpdateCtrlFile  = genControllersPath + filename.update  + extension,
-        genDeleteCtrlFile  = genControllersPath + filename.delete  + extension,
-        genGetItemCtrlFile = genControllersPath + filename.getItem  + extension;
+        genDeleteCtrlFile  = genControllersPath + filename.delete  + extension;
+//        genGetItemCtrlFile = genControllersPath + filename.getItem  + extension;
 
     var projectControllersPath = this._eDir.project.server +
                                  'controllers/' + this.mdf.module.path + '/';
@@ -70,8 +70,8 @@ expressControllerGenerator.prototype.createController = function createControlle
         projectReadOneCtrlFile = projectControllersPath + filename.readOne + extension,
         projectReadAllCtrlFile = projectControllersPath + filename.readAll + extension,
         projectUpdateCtrlFile  = projectControllersPath + filename.update  + extension,
-        projectDeleteCtrlFile  = projectControllersPath + filename.delete  + extension,
-        projectGetItemCtrlFile = projectControllersPath + filename.getItem + extension;
+        projectDeleteCtrlFile  = projectControllersPath + filename.delete  + extension;
+//        projectGetItemCtrlFile = projectControllersPath + filename.getItem + extension;
 
     if (this.mdf.module.express.create.use) {
         this.copy(genCreateCtrlFile, projectCreateCtrlFile);
@@ -93,9 +93,9 @@ expressControllerGenerator.prototype.createController = function createControlle
         this.copy(genDeleteCtrlFile, projectDeleteCtrlFile);
     }
 
-    if (this.mdf.module.express.update.use || this.mdf.module.express.delete.use) {
-        this.copy(genGetItemCtrlFile, projectGetItemCtrlFile);
-    }
+//    if (this.mdf.module.express.update.use || this.mdf.module.express.delete.use) {
+//        this.copy(genGetItemCtrlFile, projectGetItemCtrlFile);
+//    }
 };
 
 /** Cleanup downloadDir */

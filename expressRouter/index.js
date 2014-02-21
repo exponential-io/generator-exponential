@@ -63,8 +63,8 @@ expressRouterGenerator.prototype.injectRouter = function injectRouter() {
         router = '',
         routes = [],
         moduleNameUp = this.mdf.module.name.upperPlural,
-        moduleNameUs = this.mdf.module.name.upperSingular,
-        moduleNameLs = this.mdf.module.name.lowerSingular;
+        moduleNameUs = this.mdf.module.name.upperSingular;
+//        moduleNameLs = this.mdf.module.name.lowerSingular;
 
     // Controllers
     var controllersDir = '../controllers/' + this.mdf.module.path + '/',
@@ -74,24 +74,37 @@ expressRouterGenerator.prototype.injectRouter = function injectRouter() {
         readOneController = controllersDir + ctrlFilename.readOne,
         readAllController = controllersDir + ctrlFilename.readAll,
         updateController  = controllersDir + ctrlFilename.update,
-        deleteController  = controllersDir + ctrlFilename.delete,
-        getItemController = controllersDir + ctrlFilename.getItem;
+        deleteController  = controllersDir + ctrlFilename.delete;
+//        getItemController = controllersDir + ctrlFilename.getItem;
 
-    // Get Item
-    if (this.mdf.module.express.readOne.use ||
-        this.mdf.module.express.update.use ||
-        this.mdf.module.express.delete.use) {
+    /*
+        I removed Get Item because it's not a good solution when the req.param
+        is the id. When the id is passed then we know exactly which object to
+        query from the DB, so therefore using a generic select like Get Item
+        results in excessive fields being queried for 3 of the 4 use cases:
+        read one, update render, and delete.
 
-        var modelId = this.mdf.module.model.id;
-
-        routes = routes.concat([
-            '    // Get the ' + modelId + ' param',
-            '    app.param(\'' + modelId + '\',',
-            '        require(\'' + getItemController + '\').getItem',
-            '    );',
-            ''
-        ]);
-    }
+        However, Get Item is useful for situations where the req.param is a
+        non-id, such as slug. When a slug is passed then Get Item should be used
+        to query the _id that matches the slug (and ONLY THE ID). Then other
+        controllers can work with the req.item.id (where item may be company,
+        person or something else).
+     */
+//    // Get Item
+//    if (this.mdf.module.express.readOne.use ||
+//        this.mdf.module.express.update.use ||
+//        this.mdf.module.express.delete.use) {
+//
+//        var modelId = this.mdf.module.model.id;
+//
+//        routes = routes.concat([
+//            '    // Get the ' + modelId + ' param',
+//            '    app.param(\'' + modelId + '\',',
+//            '        require(\'' + getItemController + '\').getItem',
+//            '    );',
+//            ''
+//        ]);
+//    }
 
     // Create
     if (this.mdf.module.express.create.use) {
@@ -151,6 +164,7 @@ expressRouterGenerator.prototype.injectRouter = function injectRouter() {
             '    // Update ' + moduleNameUs,
             '    var ' + updateCtrl + ' = require(\'' + updateController + '\');',
             '    app.get(\'' + updateUrl + '\',',
+            '        csrf.token,',
             '        ' + updateCtrl + '.render',
             '    );',
             '    app.post(\'' + updateUrl + '\',',
