@@ -1,0 +1,5 @@
+Description:
+    Inject a module's URL into the navbar file.
+
+Example:
+    yo exponential:expressNavbar --mdf 'website/contact' [--debug]
