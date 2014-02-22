@@ -62,16 +62,16 @@ apiGenerator.prototype.apiModuleFiles = function apiModuleFiles() {
 
     this.copy(genController, projectController);
 
-    // Model
-    var genModel = [
-        this._eDir.download.src, 'server/models/', moduleNameLs, '.js'
-    ].join('');
-
-    var projectModel = [
-        this._eDir.project.server, 'models/', moduleNameLs, '.js'
-    ].join('');
-
-    this.copy(genModel, projectModel);
+//    // Model
+//    var genModel = [
+//        this._eDir.download.src, 'server/models/', moduleNameLs, '.js'
+//    ].join('');
+//
+//    var projectModel = [
+//        this._eDir.project.server, 'models/', moduleNameLs, '.js'
+//    ].join('');
+//
+//    this.copy(genModel, projectModel);
 
     // Router
     var genRouter = [

@@ -44,6 +44,8 @@ module.exports = function(options) {
         genAngularSrvApi    = prefix + 'exponential/angular/service?c=' + cacheBuster,
         genAngularViewApi   = prefix + 'exponential/angular/view?c=' + cacheBuster,
         genApiApi           = prefix + 'exponential/api?c=' + cacheBuster,
+        genApiRouterApi     = prefix + 'exponential/api/router?c=' + cacheBuster,
+        genApiCtrlApi       = prefix + 'exponential/api/controller?c=' + cacheBuster,
         //genExpressAppApi    = prefix + 'exponential/express/app?c=' + cacheBuster,
         genExpressCtrlApi   = prefix + 'exponential/express/controller?c=' + cacheBuster,
         genExpressRouterApi = prefix + 'exponential/express/router?c=' + cacheBuster,
@@ -70,6 +72,10 @@ module.exports = function(options) {
         apiUrl = genApiApi;
 //    } else if (options.generator === 'expressApp') {
 //        apiUrl = genExpressAppApi;
+    } else if (options.generator === 'apiController') {
+        apiUrl = genApiCtrlApi;
+    } else if (options.generator === 'apiRouter') {
+        apiUrl = genApiRouterApi;
     } else if (options.generator === 'expressController') {
         apiUrl = genExpressCtrlApi;
     } else if (options.generator === 'expressRouter') {
@@ -83,7 +89,10 @@ module.exports = function(options) {
     }
 
     var mdfJson;
-    if (options.generator === 'expressRouter') {
+    if (options.generator === 'apiRouter' ||
+        options.generator === 'expressRouter' ||
+        options.generator === 'expressNavbar') {
+
         mdfJson = {};
     } else {
         mdfJson = this.mdf;
@@ -201,7 +210,8 @@ module.exports = function(options) {
         }
 
         // Return immediately as the Express Router is 100% client-side
-        if (options.generator === 'expressRouter' ||
+        if (options.generator === 'apiRouter' ||
+            options.generator === 'expressRouter' ||
             options.generator === 'expressNavbar') {
 
             // Return control to yo

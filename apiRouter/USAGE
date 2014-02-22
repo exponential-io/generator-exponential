@@ -1,0 +1,5 @@
+Description:
+    Inject Express API routes into a routes file.
+
+Example:
+    yo exponential:apiRouter --mdf 'crm/companies' [--debug]

@@ -89,8 +89,8 @@ module.exports = function(_) {
     // -------------------------------------------------------------------------
 
     // 1.
-    // 2.
     mdf.module.name.upperPlural   = 'Companies';
+    // 2.
     mdf.module.name.upperSingular = 'Company';
 
     // 3. Set the path to the module's files (server/controllers/, server/views/,
@@ -99,6 +99,7 @@ module.exports = function(_) {
 
     // 4. Set the base URL
     mdf.module.url = '/companies';
+    mdf.module.apiUrl = '/api/v1' + mdf.module.url;
 
     // 5.
     mdf.module.navbar.display = true;
@@ -215,6 +216,48 @@ module.exports = function(_) {
     // contains an array of keys.
 
     // -------------------------------------------------------------------------
+    // API (6 settings)
+    // -------------------------------------------------------------------------
+
+    // 1. Pick a template
+    mdf.module.api.template = 'crud-forms';
+
+    // 2. Enable and configure the create action
+    mdf.module.api.create = {
+        use: true,
+//        action: 'post',
+        route: mdf.module.apiUrl  // Calculated member
+    };
+
+    // 3. Enable and configure the read-all action
+    mdf.module.api.readAll = {
+        use: true,
+//        action: 'get',
+        route: mdf.module.apiUrl          // Calculated member
+    };
+
+    // 4. Enable and configure the read-one action
+    mdf.module.api.readOne = {
+        use: true,
+//        action: 'get',
+        route: mdf.module.apiUrl + '/:' + mdf.module.model.id // Calculated member
+    };
+
+    // 5. Enable and configure the update action
+    mdf.module.api.update = {
+        use: true,
+//        action: 'put',
+        route: mdf.module.apiUrl + '/:' + mdf.module.model.id // Calculated member
+    };
+
+    // 6. Enable and configure the delete action
+    mdf.module.api.delete = {
+        use: true,
+//        action: 'delete',
+        route: mdf.module.apiUrl + '/:' + mdf.module.model.id // Calculated member
+    };
+
+    // -------------------------------------------------------------------------
     // Express (6 settings)
     // -------------------------------------------------------------------------
 
@@ -226,7 +269,7 @@ module.exports = function(_) {
         use: true,
         url: mdf.module.url + '/add',    // Calculated member
         route: mdf.module.url + '/add',  // Calculated member
-        title: 'Add Company'
+        title: 'Add Company'             // Default to CM
     };
 
     // 3. Enable and configure the read-all action
@@ -234,7 +277,7 @@ module.exports = function(_) {
         use: true,
         url: mdf.module.url,            // Calculated member
         route: mdf.module.url,          // Calculated member
-        title: 'Companies'
+        title: 'Companies'              // Default to CM
     };
 
     // 4. Enable and configure the read-one action
@@ -242,23 +285,23 @@ module.exports = function(_) {
         use: true,
         url: mdf.module.url + '/{{id}}',                    // Calculated member
         route: mdf.module.url + '/:' + mdf.module.model.id, // Calculated member
-        title: 'Company Details'
+        title: 'Company Details'                            // Default to CM
     };
 
     // 5. Enable and configure the update action
     mdf.module.express.update = {
         use: true,
-        url: mdf.module.url + '/edit/{{id}}',
-        route: mdf.module.url + '/edit/:' + mdf.module.model.id,
-        title: 'Update Company'
+        url: mdf.module.url + '/edit/{{id}}',                    // Calculated member
+        route: mdf.module.url + '/edit/:' + mdf.module.model.id, // Calculated member
+        title: 'Update Company'                                  // Default to CM
     };
 
     // 6. Enable and configure the delete action
     mdf.module.express.delete = {
         use: true,
-        url: mdf.module.url + '/delete/{{id}}',
-        route: mdf.module.url + '/delete/:' + mdf.module.model.id,
-        title: 'Delete Company'
+        url: mdf.module.url + '/delete/{{id}}',                    // Calculated member
+        route: mdf.module.url + '/delete/:' + mdf.module.model.id, // Calculated member
+        title: 'Delete Company'                                    // Default to CM
     };
 
 

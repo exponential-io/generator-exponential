@@ -1,0 +1,5 @@
+Description:
+    Create Express API controller(s).
+
+Example:
+    yo exponential:apiController --mdf 'crm/companies' [--debug]
