@@ -167,9 +167,8 @@ module.exports = function(_) {
     // Angular
     // -------------------------------------------------------------------------
 
-    // TODO: ANGULAR
-    // TODO: ANGULAR
-    // TODO: ANGULAR
+    // 1. Pick a template
+    mdf.module.angular.template = 'crud-forms';
 
     /**
      * Name of the Angular Create controller.
@@ -211,9 +210,6 @@ module.exports = function(_) {
      * @type {string}
      */
     mdf.module.angular.service = mdf.module.name.lowerPlural + 'Srv';
-
-    // Schema sets the name of the schema object used in the module's model and
-    // contains an array of keys.
 
     // -------------------------------------------------------------------------
     // API (6 settings)
@@ -308,6 +304,9 @@ module.exports = function(_) {
     // -------------------------------------------------------------------------
     // Schema
     // -------------------------------------------------------------------------
+
+    // Schema sets the name of the schema object used in the module's model and
+    // contains an array of keys.
 
     // TODO: SCHEMA
     // TODO: SCHEMA
