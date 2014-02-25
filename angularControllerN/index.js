@@ -6,7 +6,6 @@
  */
 'use strict';
 
-
 var util             = require('util'),
     _                = require('lodash'),
     _eCleanup        = require('../util/cleanup-download-dir'),

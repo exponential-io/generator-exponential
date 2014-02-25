@@ -42,6 +42,7 @@ module.exports = function(options) {
         genAngularSrvNApi    = prefix + 'exponential/angular/servicen?c=' + cacheBuster,
         genAngularRouterNApi = prefix + 'exponential/angular/routern?c=' + cacheBuster,
         genAngularNavbarNApi = prefix + 'exponential/angular/navbarn?c=' + cacheBuster,
+        genAngularViewNApi   = prefix + 'exponential/angular/viewn?c=' + cacheBuster,
 
         genAngularAppApi    = prefix + 'exponential/angular/app?c=' + cacheBuster,
         genAngularCtrlApi   = prefix + 'exponential/angular/controller?c=' + cacheBuster,
@@ -73,6 +74,8 @@ module.exports = function(options) {
         apiUrl = genAngularRouterNApi;
     } else if (options.generator === 'angularNavbarN') {
         apiUrl = genAngularNavbarNApi;
+    } else if (options.generator === 'angularViewN') {
+        apiUrl = genAngularViewNApi;
 
     } else if (options.generator === 'angularController') {
         apiUrl = genAngularCtrlApi;

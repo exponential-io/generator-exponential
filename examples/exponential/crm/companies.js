@@ -176,7 +176,7 @@ module.exports = function(_) {
     // 2. Enable and configure the create action
     mdf.module.angular.create = {
         use: true,
-        url: mdf.module.url + '/add',    // Calculated member
+        url: mdf.module.relativeUrl + '/add',    // Calculated member
         route: mdf.module.url + '/add',  // Calculated member
         title: 'Add Company'             // Default to CM
     };
@@ -184,7 +184,7 @@ module.exports = function(_) {
     // 3. Enable and configure the read-all action
     mdf.module.angular.readAll = {
         use: true,
-        url: mdf.module.url,            // Calculated member
+        url: mdf.module.relativeUrl,            // Calculated member
         route: mdf.module.url,          // Calculated member
         title: 'Companies'              // Default to CM
     };
@@ -192,7 +192,7 @@ module.exports = function(_) {
     // 4. Enable and configure the read-one action
     mdf.module.angular.readOne = {
         use: true,
-        url: mdf.module.url + '/:' + mdf.module.model.id,   // Calculated member
+        url: mdf.module.relativeUrl + '/:' + mdf.module.model.id,   // Calculated member
         route: mdf.module.url + '/:' + mdf.module.model.id, // Calculated member
         title: 'Company Details'                            // Default to CM
     };
@@ -200,7 +200,7 @@ module.exports = function(_) {
     // 5. Enable and configure the update action
     mdf.module.angular.update = {
         use: true,
-        url: mdf.module.url + '/edit/:' + mdf.module.model.id,   // Calculated member
+        url: mdf.module.relativeUrl + '/edit/:' + mdf.module.model.id,   // Calculated member
         route: mdf.module.url + '/edit/:' + mdf.module.model.id, // Calculated member
         title: 'Update Company'                                  // Default to CM
     };
