@@ -1,0 +1,5 @@
+Description:
+    Create an Angular service.
+
+Example:
+    yo exponential:angularService --mdf 'crm/companies' [--debug]

@@ -37,6 +37,12 @@ module.exports = function(options) {
         xsrfApi             = prefix + 'xsrf-cookie?c=' + cacheBuster,
         loginApi            = prefix + 'login?c=' + cacheBuster,
         genProjectApi       = prefix + 'exponential/project?c=' + cacheBuster,
+
+        genAngularCtrlNApi   = prefix + 'exponential/angular/controllern?c=' + cacheBuster,
+        genAngularSrvNApi    = prefix + 'exponential/angular/servicen?c=' + cacheBuster,
+        genAngularRouterNApi = prefix + 'exponential/angular/routern?c=' + cacheBuster,
+        genAngularNavbarNApi = prefix + 'exponential/angular/navbarn?c=' + cacheBuster,
+
         genAngularAppApi    = prefix + 'exponential/angular/app?c=' + cacheBuster,
         genAngularCtrlApi   = prefix + 'exponential/angular/controller?c=' + cacheBuster,
         genAngularModApi    = prefix + 'exponential/angular/module?c=' + cacheBuster,
@@ -58,6 +64,16 @@ module.exports = function(options) {
         apiUrl = genProjectApi;
     } else if (options.generator === 'angularApp') {
         apiUrl = genAngularAppApi;
+
+    } else if (options.generator === 'angularControllerN') {
+        apiUrl = genAngularCtrlNApi;
+    } else if (options.generator === 'angularServiceN') {
+        apiUrl = genAngularSrvNApi;
+    } else if (options.generator === 'angularRouterN') {
+        apiUrl = genAngularRouterNApi;
+    } else if (options.generator === 'angularNavbarN') {
+        apiUrl = genAngularNavbarNApi;
+
     } else if (options.generator === 'angularController') {
         apiUrl = genAngularCtrlApi;
     } else if (options.generator === 'angularModule') {
@@ -91,7 +107,8 @@ module.exports = function(options) {
     var mdfJson;
     if (options.generator === 'apiRouter' ||
         options.generator === 'expressRouter' ||
-        options.generator === 'expressNavbar') {
+        options.generator === 'expressNavbar'||
+        options.generator === 'angularNavbarN') {
 
         mdfJson = {};
     } else {
@@ -135,8 +152,8 @@ module.exports = function(options) {
                 typeof self._ePassword === 'undefined') {
 
                 setTimeout(function() {
-                    console.log('Correcting for known bug that will be fixed');
-                    console.log('before the 1.0 release.');
+//                    console.log('Correcting for known bug that will be fixed');
+//                    console.log('before the 1.0 release.');
 
                     var login = request({
                             method: 'POST',
@@ -212,7 +229,8 @@ module.exports = function(options) {
         // Return immediately as the Express Router is 100% client-side
         if (options.generator === 'apiRouter' ||
             options.generator === 'expressRouter' ||
-            options.generator === 'expressNavbar') {
+            options.generator === 'expressNavbar'||
+            options.generator === 'angularNavbarN') {
 
             // Return control to yo
             cb();

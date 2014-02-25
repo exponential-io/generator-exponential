@@ -94,12 +94,14 @@ module.exports = function(_) {
     mdf.module.name.upperSingular = 'Company';
 
     // 3. Set the path to the module's files (server/controllers/, server/views/,
-    //    or client/ is prepended)
+    //    or client/{{angularDirectory}}/js/controllers/ is prepended)
     mdf.module.path = 'companies';
 
     // 4. Set the base URL
-    mdf.module.url = '/companies';
-    mdf.module.apiUrl = '/api/v1' + mdf.module.url;
+    // Relative URL is used by Angular modules where each URL is a relative path.
+    mdf.module.relativeUrl = 'companies';
+    mdf.module.url = '/' + mdf.module.relativeUrl;          // Calculated Member
+    mdf.module.apiUrl = '/api/v1/' + mdf.module.relativeUrl;// Calculated Member
 
     // 5.
     mdf.module.navbar.display = true;
@@ -111,8 +113,9 @@ module.exports = function(_) {
     mdf.module.name.lowerPlural   = mdf.module.name.upperPlural.toLowerCase();
     mdf.module.name.lowerSingular = mdf.module.name.upperSingular.toLowerCase();
 
+    // TODO: module level urlBase should be removed
     mdf.module.urlBase = mdf.module.path; // TODO: Replace urlBase with baseHref
-    mdf.module.baseHref = mdf.module.path;
+//    mdf.module.baseHref = mdf.module.path;
 
     mdf.module.navbar.label = mdf.module.name.upperPlural;
 
@@ -170,46 +173,115 @@ module.exports = function(_) {
     // 1. Pick a template
     mdf.module.angular.template = 'crud-forms';
 
+    // 2. Enable and configure the create action
+    mdf.module.angular.create = {
+        use: true,
+        url: mdf.module.url + '/add',    // Calculated member
+        route: mdf.module.url + '/add',  // Calculated member
+        title: 'Add Company'             // Default to CM
+    };
+
+    // 3. Enable and configure the read-all action
+    mdf.module.angular.readAll = {
+        use: true,
+        url: mdf.module.url,            // Calculated member
+        route: mdf.module.url,          // Calculated member
+        title: 'Companies'              // Default to CM
+    };
+
+    // 4. Enable and configure the read-one action
+    mdf.module.angular.readOne = {
+        use: true,
+        url: mdf.module.url + '/:' + mdf.module.model.id,   // Calculated member
+        route: mdf.module.url + '/:' + mdf.module.model.id, // Calculated member
+        title: 'Company Details'                            // Default to CM
+    };
+
+    // 5. Enable and configure the update action
+    mdf.module.angular.update = {
+        use: true,
+        url: mdf.module.url + '/edit/:' + mdf.module.model.id,   // Calculated member
+        route: mdf.module.url + '/edit/:' + mdf.module.model.id, // Calculated member
+        title: 'Update Company'                                  // Default to CM
+    };
+
+    // 6. Enable and configure the delete action
+
+    // TODO: Rename to remove
+    // TODO: Rename to remove
+    // TODO: Rename to remove
+    // TODO: Rename to remove
+
+    mdf.module.angular.delete = {
+        use: true,
+        // Delete URL makes no sense as there is only a Remove URL that sends
+        // the delete request to the server
+//        url: mdf.module.url + '/delete/{{id}}',                    // Calculated member
+        route: mdf.module.url + '/delete/:' + mdf.module.model.id, // Calculated member
+        title: 'Delete Company'                                    // Default to CM
+    };
+
+    // Everything below here defaults to a calculated member. There is no reason
+    // to modify the values below unless you are creating a custom naming
+    // convention for Angular code.
+
     /**
      * Name of the Angular Create controller.
      * @type {string}
      * @memberof mdf.module.angular.controllers
      */
-    mdf.module.angular.controllers.create = mdf.module.name.upperPlural + 'CreateCtrl';
+//    mdf.module.angular.controllers.create = mdf.module.name.upperPlural + 'CreateCtrl';
+    mdf.module.angular.controllers.create = mdf.module.name.upperPlural +
+        mdf.project.angular.controllers.postfix.create;
 
     /**
      * Name of the Angular Read All controller.
      * @type {string}
      * @memberof mdf.module.angular.controllers
      */
-    mdf.module.angular.controllers.readAll = mdf.module.name.upperPlural + 'ReadAllCtrl';
+//    mdf.module.angular.controllers.readAll = mdf.module.name.upperPlural + 'ReadAllCtrl';
+    mdf.module.angular.controllers.readAll = mdf.module.name.upperPlural +
+        mdf.project.angular.controllers.postfix.readAll;
 
     /**
      * Name of the Angular Read One controller.
      * @type {string}
      * @memberof mdf.module.angular.controllers
      */
-    mdf.module.angular.controllers.readOne = mdf.module.name.upperPlural + 'ReadOneCtrl';
+//    mdf.module.angular.controllers.readOne = mdf.module.name.upperPlural + 'ReadOneCtrl';
+    mdf.module.angular.controllers.readOne = mdf.module.name.upperPlural +
+        mdf.project.angular.controllers.postfix.readOne;
 
     /**
      * Name of the Angular Update controller.
      * @type {string}
      * @memberof mdf.module.angular.controllers
      */
-    mdf.module.angular.controllers.update = mdf.module.name.upperPlural + 'Update';
+//    mdf.module.angular.controllers.update = mdf.module.name.upperPlural + 'Update';
+    mdf.module.angular.controllers.update = mdf.module.name.upperPlural +
+        mdf.project.angular.controllers.postfix.update;
+
+    // Angular Remove (Delete) controller
+    mdf.module.angular.controllers.remove = mdf.module.name.upperPlural +
+        mdf.project.angular.controllers.postfix.remove;
 
     /**
      * The Angular module name is used to create a namespace for this module.
      * @type {string}
      */
-    mdf.module.angular.module = mdf.module.name.lowerPlural + 'Mod';
+//    mdf.module.angular.module = mdf.module.name.lowerPlural + 'Mod';   // Calculated Member
+    mdf.module.angular.module = mdf.module.name.lowerPlural +
+        mdf.project.angular.module.postfix;   // Calculated Member
 
     /**
      * The Angular service name is used to name the services provided by this
      * module.
      * @type {string}
      */
-    mdf.module.angular.service = mdf.module.name.lowerPlural + 'Srv';
+//    mdf.module.angular.service = mdf.module.name.lowerPlural + 'Srv';
+    mdf.module.angular.service = mdf.module.name.lowerPlural +
+        mdf.project.angular.service.postfix;
+
 
     // -------------------------------------------------------------------------
     // API (6 settings)
@@ -221,35 +293,38 @@ module.exports = function(_) {
     // 2. Enable and configure the create action
     mdf.module.api.create = {
         use: true,
-//        action: 'post',
         route: mdf.module.apiUrl  // Calculated member
     };
 
     // 3. Enable and configure the read-all action
     mdf.module.api.readAll = {
         use: true,
-//        action: 'get',
         route: mdf.module.apiUrl          // Calculated member
     };
 
     // 4. Enable and configure the read-one action
     mdf.module.api.readOne = {
         use: true,
-//        action: 'get',
         route: mdf.module.apiUrl + '/:' + mdf.module.model.id // Calculated member
     };
 
     // 5. Enable and configure the update action
     mdf.module.api.update = {
         use: true,
-//        action: 'put',
         route: mdf.module.apiUrl + '/:' + mdf.module.model.id // Calculated member
     };
 
     // 6. Enable and configure the delete action
+
+    // Angular already uses the new remove configuration
+    mdf.module.api.remove = {
+        use: true,
+        route: mdf.module.apiUrl + '/:' + mdf.module.model.id // Calculated member
+    };
+
+    // TODO: CHANGE delete to remove in the API generator
     mdf.module.api.delete = {
         use: true,
-//        action: 'delete',
         route: mdf.module.apiUrl + '/:' + mdf.module.model.id // Calculated member
     };
 

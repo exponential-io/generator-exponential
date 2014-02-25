@@ -57,6 +57,7 @@ expressNavbarGenerator.prototype.injectNavbar = function injectNavbar() {
         splicable: link,
         appendComma: false
     });
+
     console.log(
         chalk.green('Exponential:'),
         'Injected URL to',

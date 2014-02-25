@@ -51,6 +51,10 @@ module.exports = function() {
 
     mdf.app.urlBase = '/crm';
 
+    mdf.app.angular = {};
+    mdf.app.angular.directory = 'crm';
+    mdf.app.angular.baseHref = mdf.app.angular.directory;
+
     mdf.app.name.upperPlural   = 'CRM';
 
     /**

@@ -1,0 +1,5 @@
+Description:
+    Inject Angular module's URL into the navbar.
+
+Example:
+    yo exponential:angularNavbar --mdf 'crm/companies' [--debug]

@@ -1,0 +1,5 @@
+Description:
+    Create Angular controller(s).
+
+Example:
+    yo exponential:angularController --mdf 'crm/companies' [--debug]

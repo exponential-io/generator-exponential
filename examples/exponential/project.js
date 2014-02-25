@@ -236,7 +236,19 @@ module.exports = function() {
 
     // Namespace for default Angular settings.
     // Do NOT edit this value.
-    mdf.project.angular = {};
+    mdf.project.angular = {
+        module: {},
+        service: {},
+        router: {}
+    };
+
+    mdf.project.angular.module.postfix = 'Mod';
+    mdf.project.angular.service = {
+        filename: '-srv',
+        postfix: 'Srv',
+        extension: 'js'
+    };
+    mdf.project.angular.router.extension = 'js';
 
     //
     mdf.project.angular.controllers = {
@@ -247,17 +259,17 @@ module.exports = function() {
             readOne: 'read-one-ctrl',
             readAll: 'read-all-ctrl',
             update: 'update-ctrl',
-            delete: 'delete-ctrl'
+            remove: 'remove-ctrl'
         },
         // ### objectNamePostfix
         // Text to append to each Angular Controller object which is referenced
         // in Angular source.
-        objectNamePostfix: {
+        postfix: {
             create: 'CreateCtrl',
             readOne: 'ReadOneCtrl',
             readAll: 'ReadAllCtrl',
             update: 'UpdateCtrl',
-            delete: 'DeleteCtrl'
+            remove: 'RemoveCtrl'
         },
         extension: 'js'
     };
@@ -267,11 +279,10 @@ module.exports = function() {
         // ### mdf.project.angular.views.filename
         // File names for Angular views.
         filename: {
-            create: 'create-ctrl',
-            readOne: 'read-one-ctrl',
-            readAll: 'read-all-ctrl',
-            update: 'update-ctrl',
-            delete: 'delete-ctrl'
+            create: 'create',
+            readOne: 'read-one',
+            readAll: 'read-all',
+            update: 'update'
         },
         // ### mdf.project.angular.views.extension
         // File name extension for Angular views.
