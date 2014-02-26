@@ -49,6 +49,13 @@ module.exports = function() {
         module: {}
     };
 
+    // TODO: THE ENTIRE URL URLBASE, ETC. NEEDS TO BE CLEANED UP. THIS IS REALLY
+    // TODO: A MESS. I'M CONFUSED, SO HOW DO YOU THINK USER'S WILL FEEL ABOUT
+    // TODO: THIS?!?!
+
+    mdf.app.relativeUrl = 'crm';
+    mdf.app.url = '/' + mdf.app.relativeUrl;          // Calculated Member
+
     mdf.app.urlBase = '/crm';
 
     mdf.app.angular = {};

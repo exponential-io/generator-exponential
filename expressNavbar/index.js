@@ -13,19 +13,46 @@ var _                = require('lodash'),
     _eGeneratorBase  = require('../util/generator-base'),
     _eLoadMdf        = require('../util/load-mdf'),
     _eMkDirs         = require('../util/mkdir'),
-    rimraf           = require('rimraf'),
     _eDownloadSource = require('../util/download-source'),
     _eConfig         = require('../util/config'),
     _eCleanup        = require('../util/cleanup-download-dir');
 
 
+/**
+ *
+ * @param mdfPath
+ * @returns {Object} mdfLoadSettings
+ */
+function mdfType(mdfPath){
+    // `mdfLoadSettings` default to
+    // `mdfPath` is the path to the MDF file passed via --mdf.
+    var mdfLoadSettings = {
+            project: false,
+            app: false,
+            module: true
+        },
+        mdfPathComponents = mdfPath.split('/'),
+        mdfFile = mdfPathComponents[mdfPathComponents.length - 1];
+
+    if (mdfFile === 'app') {
+        mdfLoadSettings = {
+            project: false,
+            app: true,
+            module: false
+        };
+    }
+
+    return mdfLoadSettings;
+}
+
 var expressNavbarGenerator = module.exports = function expressNavbarGenerator() {
     _eGeneratorBase.apply(this, arguments);
-    _eLoadMdf.apply(this, [{
-        project: false,
-        app: false,
-        module: true
-    }]);
+
+    // This module can be called with either an app MDF or an Express module
+    // MDF.
+    this.mdfLoadSettings = mdfType(this.mdf);
+
+    _eLoadMdf.apply(this, [this.mdfLoadSettings]);
     _eConfig.apply(this);
 };
 
@@ -46,9 +73,20 @@ expressNavbarGenerator.prototype.generateSrc = function generateSrc() {
 expressNavbarGenerator.prototype.injectNavbar = function injectNavbar() {
     var navbar = 'server/views/partials/navbar.hbs',
         needle = '<!-- exponential:navbar -->',
-        url = this.mdf.module.express.readAll.url,
-        title = this.mdf.module.express.readAll.title,
-        link = ['<li><a href="' + url + '">' + title + '</a></li>'];
+        url = '',
+        title = '';
+
+    if (this.mdfLoadSettings.app === true) {
+        // Inject a link to the root of an Angular app
+        url = this.mdf.app.url;
+        title = this.mdf.app.name.upperSingular;
+    } else {
+        // Default: Inject a link to an express module
+        url = this.mdf.module.express.readAll.url;
+        title = this.mdf.module.express.readAll.title;
+    }
+
+    var link = ['<li><a href="' + url + '">' + title + '</a></li>'];
 
     // Inject the URL into the Express navbar
     _eInject({
