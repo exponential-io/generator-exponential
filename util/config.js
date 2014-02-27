@@ -1,6 +1,6 @@
 'use strict';
 
-var async = require('async'),
+var chalk = require('chalk'),
     path  = require('path'),
     fs    = require('fs');
 
@@ -30,67 +30,21 @@ var Config = module.exports = function Config() {
 
     function readConfig(err, contents) {
         if (err) {
-            throw err;
+            console.log(
+                chalk.blue('Exponential:'),
+                'An error occurred when reading the config file.'
+            );
+            console.log('err: ' + err);
+            console.log('');
+            console.log('Please run the following command to fix your config file:');
+            console.log(chalk.green('exponential --config'));
         }
 
+        // If there are no errors, then we'll simply read the config file and
+        // attempt a login.
         config = JSON.parse(contents);
         self._eEmail = config.email;
         self._ePassword = config.password;
         cb();
     }
-
-//    function createConfig() {
-//        async.series([
-//            function(callback) {
-//                // Read the ~/.exponential/config.json configuration file
-//                fs.readFile(configFile, 'utf8', readConfig);
-//
-//                function readConfig(err, contents) {
-//                    if (err) {
-//                        //throw err;
-//                        console.log(err);
-//                        // Create the ~/.exponential/config.json directory and file if they
-//                        // do not exist
-//                        createConfig();
-//                    }
-//
-//                    config = JSON.parse(contents);
-//                    self._eEmail = config.email;
-//                    self._ePassword = config.password;
-//
-//                    callback(null);
-//                }
-//            },
-//            function(callback) {
-//                // Create the ~/.exponential directory
-//                fs.mkdir(configDir, '0700', function(err) {
-//                    if (err) {
-//                        // Ignore the error if ~/.exponential already exists
-//                        if (err.code !== 'EEXIST') {
-//                            throw err;
-//                        }
-//                    }
-//                });
-//
-//                callback(null);
-//            }
-//        ]);
-//    }
-//
-//    function makeConfigDir() {
-//
-//    }
-//
-//    function mkdirCb(err) {
-//        if (err) {
-//            // Ignore the error if ~/.exponential already exists
-//            if (err.code === 'EEXIST') {
-//                promptUser();
-//            } else {
-//                throw err;
-//            }
-//        } else {
-//            promptUser();
-//        }
-//    }
 };

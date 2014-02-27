@@ -1,0 +1,5 @@
+Description:
+    Create an Exponential config file.
+
+Example:
+    yo exponential:configFile

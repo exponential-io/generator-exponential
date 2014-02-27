@@ -1,0 +1,6 @@
+Description:
+    Initialize an Exponential.io project directory and setup the example MDF
+    files.
+
+Example:
+    yo exponential:initProject
