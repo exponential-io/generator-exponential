@@ -150,11 +150,11 @@ module.exports = function() {
     // Do NOT edit this value.
     mdf.project.google = {};
 
-    // Google Analytics Tracking Id
-    mdf.project.google.trackingId = 'UA-47311952-1';
+    // Google Analytics Tracking Id (ex: UA-XXXXX-XX)
+    mdf.project.google.trackingId = '';
 
-    // Google Analytics website
-    mdf.project.google.website = 'exponential.io';
+    // Google Analytics website (ex: exponential.io)
+    mdf.project.google.website = '';
 
     // Set a default number of spaces per tab. The most common values are 2 and
     // 4.
