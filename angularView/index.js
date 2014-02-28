@@ -1,18 +1,17 @@
-// # Create an Angular view.
-
+// Create one or more Angular views
+// ================================
 // @copyright Copyright 2014 Exponential.io. All rights reserved.
 // @author Akbar S. Ahmed <akbar@exponential.io>
 'use strict';
 
-
-var util             = require('util'),
-    _                = require('lodash'),
+var _                = require('lodash'),
+    util             = require('util'),
+    _eCleanup        = require('../util/cleanup-download-dir'),
+    _eConfig         = require('../util/config'),
+    _eDownloadSource = require('../util/download-source'),
     _eGeneratorBase  = require('../util/generator-base'),
     _eLoadMdf        = require('../util/load-mdf'),
-    _eMkDirs         = require('../util/mkdir'),
-    rimraf           = require('rimraf'),
-    _eDownloadSource = require('../util/download-source'),
-    _eConfig         = require('../util/config');
+    _eMkDirs         = require('../util/mkdir');
 
 
 var AngularViewGenerator = module.exports = function AngularViewGenerator() {
@@ -27,6 +26,9 @@ var AngularViewGenerator = module.exports = function AngularViewGenerator() {
 
 util.inherits(AngularViewGenerator, _eGeneratorBase);
 
+// Pre-cleanup downloadDir
+AngularViewGenerator.prototype.preCleanup = _eCleanup;
+
 // Download the source files
 AngularViewGenerator.prototype.generateSrc = function generateSrc() {
     _eDownloadSource.apply(this, [{
@@ -37,51 +39,60 @@ AngularViewGenerator.prototype.generateSrc = function generateSrc() {
 
 // Create the Angular views directory structure
 AngularViewGenerator.prototype.angularDirs = function angularDirs() {
-    var appNameLp    = this.mdf.app.name.lowerPlural,
-        moduleNameLp = this.mdf.module.name.lowerPlural;
+    this.angularDir = this.mdf.app.angular.directory;
+    this.modulePath = this.mdf.module.path;
 
-    // Relative project paths
-    var projectModuleViews = [
-        this._eDir.project.client,
-        appNameLp + '/' + 'js/views/' + moduleNameLp + '/'
-    ].join('');
+    // Project views directory
+    var projectViewsPath = this._eDir.project.client +
+                           this.angularDir + '/views/' + this.modulePath + '/';
 
     // TODO: This is not yet usable. I need to upgrade the entire automation of
     // TODO: test automation so that its production ready.
-    var testRoot = 'test/angular/' + appNameLp + '/views/' + moduleNameLp + '/';
+    var testRoot = 'test/angular/' + this.angularDir + '/views/' + this.modulePath + '/';
 
     _eMkDirs.apply(this, [[
-        projectModuleViews,
+        projectViewsPath,
         testRoot
     ]]);
 };
 
-// Create the Angular files - Routes
+// Create the Angular views
 AngularViewGenerator.prototype.angularFiles = function angularFiles() {
-    var appNameLp    = this.mdf.app.name.lowerPlural,
-        moduleNameLp = this.mdf.module.name.lowerPlural;
+    var filename = this.mdf.project.angular.views.filename,
+        ext = '.' + this.mdf.project.angular.views.extension;
 
-    var genViews = [
-        this._eDir.download.src,
-        'client/' + appNameLp + '/views/' + moduleNameLp + '/'
-    ].join('');
+    var genViewsPath = this._eDir.download.src +
+        'client/' + this.angularDir + '/views/' + this.modulePath + '/';
 
-    var projectViews = [
-        this._eDir.project.client,
-        appNameLp + '/views/' + moduleNameLp + '/'
-    ].join('');
+    var genCreateViewFile  = genViewsPath + filename.create  + ext,
+        genReadOneViewFile = genViewsPath + filename.readOne + ext,
+        genReadAllViewFile = genViewsPath + filename.readAll + ext,
+        genUpdateViewFile  = genViewsPath + filename.update  + ext;
 
-    // Views
-    this.copy(genViews + 'create.html',   projectViews + 'create.html');
-    this.copy(genViews + 'read-all.html', projectViews + 'read-all.html');
-    this.copy(genViews + 'read-one.html', projectViews + 'read-one.html');
+    var projectViewsPath = this._eDir.project.client +
+                           this.angularDir + '/views/' + this.modulePath + '/';
+
+    var projectCreateViewFile  = projectViewsPath + filename.create  + ext,
+        projectReadOneViewFile = projectViewsPath + filename.readOne + ext,
+        projectReadAllViewFile = projectViewsPath + filename.readAll + ext,
+        projectUpdateViewFile  = projectViewsPath + filename.update  + ext;
+
+    if (this.mdf.module.angular.create.use) {
+        this.copy(genCreateViewFile, projectCreateViewFile);
+    }
+
+    if (this.mdf.module.angular.readAll.use) {
+        this.copy(genReadAllViewFile, projectReadAllViewFile);
+    }
+
+    if (this.mdf.module.angular.readOne.use) {
+        this.copy(genReadOneViewFile, projectReadOneViewFile);
+    }
+
+    if (this.mdf.module.angular.update.use) {
+        this.copy(genUpdateViewFile, projectUpdateViewFile);
+    }
 };
 
 // Cleanup downloadDir
-AngularViewGenerator.prototype.cleanupDownloadDir = function cleanupDownloadDir() {
-    rimraf(this._eDir.download.root, function(err) {
-        if (err) {
-            console.log(err);
-        }
-    });
-};
+AngularViewGenerator.prototype.cleanupDownloadDir = _eCleanup;

@@ -9,13 +9,13 @@
 
 var util             = require('util'),
     _                = require('lodash'),
-    _eInject         = require('../util/inject'),
-    _eGeneratorBase  = require('../util/generator-base'),
-    _eLoadMdf        = require('../util/load-mdf'),
-    _eMkDirs         = require('../util/mkdir'),
-    rimraf           = require('rimraf'),
+    _eCleanup        = require('../util/cleanup-download-dir'),
+    _eConfig         = require('../util/config'),
     _eDownloadSource = require('../util/download-source'),
-    _eConfig         = require('../util/config');
+    _eGeneratorBase  = require('../util/generator-base'),
+    _eInject         = require('../util/inject'),
+    _eLoadMdf        = require('../util/load-mdf'),
+    _eMkDirs         = require('../util/mkdir');
 
 
 var AngularServiceGenerator = module.exports = function AngularServiceGenerator() {
@@ -29,6 +29,9 @@ var AngularServiceGenerator = module.exports = function AngularServiceGenerator(
 };
 
 util.inherits(AngularServiceGenerator, _eGeneratorBase);
+
+// Pre-cleanup downloadDir
+AngularServiceGenerator.prototype.preCleanup = _eCleanup;
 
 /** Download the source files */
 AngularServiceGenerator.prototype.generateSrc = function generateSrc() {
@@ -44,33 +47,36 @@ AngularServiceGenerator.prototype.angularServiceFiles = function angularServiceF
         moduleNameLp = this.mdf.module.name.lowerPlural;
 
     // Generator paths
-    var genServices = [
-        this._eDir.download.src + 'client/',
-        appNameLp + '/' + 'js/services/' + moduleNameLp + '/',
-        moduleNameLp + '-srv.js'
-    ].join('');
+    var genServicesPath = this._eDir.download.src +
+                          'client/' + this.mdf.app.angular.directory +
+                          '/js/services/' + this.mdf.module.path + '/';
+    var genServicesFile = genServicesPath +
+        moduleNameLp + this.mdf.project.angular.service.filename +
+        '.' + this.mdf.project.angular.service.extension;
 
     // Project paths
-    var moduleServices = [
-        this._eDir.project.client,
-        appNameLp + '/' + 'js/services/' + moduleNameLp + '/',
-        moduleNameLp + '-srv.js'
-    ].join('');
+    var projectServicesPath = this._eDir.project.client +
+        this.mdf.app.angular.directory +
+        '/js/services/' + this.mdf.module.path + '/';
+
+    var projectServicesFile  = projectServicesPath +
+        moduleNameLp + this.mdf.project.angular.service.filename +
+        '.' + this.mdf.project.angular.service.extension;
 
     // Services
-    this.copy(genServices, moduleServices);
+    this.copy(genServicesFile, projectServicesFile);
 
     // Insert references to each router in the index.html file.
     // The 'js/' prefix to each path and the '.js' file extension are
     // automatically added by the inject method.
 
-    var servicesJsDir = 'services/' + moduleNameLp + '/';
+    var servicesJsDir = 'services/' + this.mdf.module.path + '/';
     var jsFiles = [
-        servicesJsDir + moduleNameLp + '-srv'
+        servicesJsDir + moduleNameLp + this.mdf.project.angular.service.filename
     ];
 
-    var indexHtml = this._eDir.project.client + appNameLp + '/index.html';
-
+    var indexHtml = this._eDir.project.client +
+                    this.mdf.app.angular.directory + '/index.html';
     jsFiles.forEach(function(jsFile) {
         _eInject({
             targetFile: indexHtml,
@@ -84,10 +90,4 @@ AngularServiceGenerator.prototype.angularServiceFiles = function angularServiceF
 };
 
 /** Cleanup downloadDir */
-AngularServiceGenerator.prototype.cleanupDownloadDir = function cleanupDownloadDir() {
-    rimraf(this._eDir.download.root, function(err) {
-        if (err) {
-            console.log(err);
-        }
-    });
-};
+AngularServiceGenerator.prototype.cleanupDownloadDir = _eCleanup;

@@ -1,5 +1,0 @@
-Description:
-    Create an Angular view.
-
-Example:
-    yo exponential:angularView --mdf 'crm/companies' [--debug]

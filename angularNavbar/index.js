@@ -38,7 +38,7 @@ AngularNavbarGenerator.prototype.preCleanup = _eCleanup;
 AngularNavbarGenerator.prototype.generateSrc = function generateSrc() {
     _eDownloadSource.apply(this, [{
         _eMkDirs: _eMkDirs,
-        generator: 'angularNavbarN'
+        generator: 'angularNavbar'
     }]);
 };
 

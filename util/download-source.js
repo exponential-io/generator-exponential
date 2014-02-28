@@ -37,19 +37,13 @@ module.exports = function(options) {
         xsrfApi             = prefix + 'xsrf-cookie?c=' + cacheBuster,
         loginApi            = prefix + 'login?c=' + cacheBuster,
         genProjectApi       = prefix + 'exponential/project?c=' + cacheBuster,
-
-        genAngularCtrlNApi   = prefix + 'exponential/angular/controllern?c=' + cacheBuster,
-        genAngularSrvNApi    = prefix + 'exponential/angular/servicen?c=' + cacheBuster,
-        genAngularRouterNApi = prefix + 'exponential/angular/routern?c=' + cacheBuster,
-        genAngularNavbarNApi = prefix + 'exponential/angular/navbarn?c=' + cacheBuster,
-        genAngularViewNApi   = prefix + 'exponential/angular/viewn?c=' + cacheBuster,
-
         genAngularAppApi    = prefix + 'exponential/angular/app?c=' + cacheBuster,
         genAngularCtrlApi   = prefix + 'exponential/angular/controller?c=' + cacheBuster,
-        genAngularModApi    = prefix + 'exponential/angular/module?c=' + cacheBuster,
-        genAngularRouterApi = prefix + 'exponential/angular/router?c=' + cacheBuster,
         genAngularSrvApi    = prefix + 'exponential/angular/service?c=' + cacheBuster,
+        genAngularRouterApi = prefix + 'exponential/angular/router?c=' + cacheBuster,
+        genAngularNavbarApi = prefix + 'exponential/angular/navbar?c=' + cacheBuster,
         genAngularViewApi   = prefix + 'exponential/angular/view?c=' + cacheBuster,
+        genAngularModApi    = prefix + 'exponential/angular/module?c=' + cacheBuster,
         genApiApi           = prefix + 'exponential/api?c=' + cacheBuster,
         genApiRouterApi     = prefix + 'exponential/api/router?c=' + cacheBuster,
         genApiCtrlApi       = prefix + 'exponential/api/controller?c=' + cacheBuster,
@@ -65,28 +59,19 @@ module.exports = function(options) {
         apiUrl = genProjectApi;
     } else if (options.generator === 'angularApp') {
         apiUrl = genAngularAppApi;
-
-    } else if (options.generator === 'angularControllerN') {
-        apiUrl = genAngularCtrlNApi;
-    } else if (options.generator === 'angularServiceN') {
-        apiUrl = genAngularSrvNApi;
-    } else if (options.generator === 'angularRouterN') {
-        apiUrl = genAngularRouterNApi;
-    } else if (options.generator === 'angularNavbarN') {
-        apiUrl = genAngularNavbarNApi;
-    } else if (options.generator === 'angularViewN') {
-        apiUrl = genAngularViewNApi;
-
     } else if (options.generator === 'angularController') {
         apiUrl = genAngularCtrlApi;
-    } else if (options.generator === 'angularModule') {
-        apiUrl = genAngularModApi;
-    } else if (options.generator === 'angularRouter') {
-        apiUrl = genAngularRouterApi;
     } else if (options.generator === 'angularService') {
         apiUrl = genAngularSrvApi;
+    } else if (options.generator === 'angularRouter') {
+        apiUrl = genAngularRouterApi;
+    } else if (options.generator === 'angularNavbar') {
+        apiUrl = genAngularNavbarApi;
     } else if (options.generator === 'angularView') {
         apiUrl = genAngularViewApi;
+    } else if (options.generator === 'angularModule') {
+        apiUrl = genAngularModApi;
+
     } else if (options.generator === 'api') {
         apiUrl = genApiApi;
 //    } else if (options.generator === 'expressApp') {
@@ -111,7 +96,7 @@ module.exports = function(options) {
     if (options.generator === 'apiRouter' ||
         options.generator === 'expressRouter' ||
         options.generator === 'expressNavbar'||
-        options.generator === 'angularNavbarN') {
+        options.generator === 'angularNavbar') {
 
         mdfJson = {};
     } else {
@@ -233,7 +218,7 @@ module.exports = function(options) {
         if (options.generator === 'apiRouter' ||
             options.generator === 'expressRouter' ||
             options.generator === 'expressNavbar'||
-            options.generator === 'angularNavbarN') {
+            options.generator === 'angularNavbar') {
 
             // Return control to yo
             cb();

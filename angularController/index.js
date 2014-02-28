@@ -1,24 +1,23 @@
 /**
- * Create all Angular controllers for a module.
+ * Create a server-side Express controller.
  *
  * @copyright Copyright 2014 Exponential.io. All rights reserved.
  * @author Akbar S. Ahmed <akbar@exponential.io>
  */
 'use strict';
 
-
-var util            = require('util'),
-    _               = require('lodash'),
-    _eInject        = require('../util/inject'),
-    _eGeneratorBase = require('../util/generator-base'),
-    _eLoadMdf       = require('../util/load-mdf'),
-    _eMkDirs        = require('../util/mkdir'),
-    rimraf           = require('rimraf'),
+var util             = require('util'),
+    _                = require('lodash'),
+    _eCleanup        = require('../util/cleanup-download-dir'),
+    _eConfig         = require('../util/config'),
     _eDownloadSource = require('../util/download-source'),
-    _eConfig         = require('../util/config');
+    _eGeneratorBase  = require('../util/generator-base'),
+    _eInject         = require('../util/inject'),
+    _eLoadMdf        = require('../util/load-mdf'),
+    _eMkDirs         = require('../util/mkdir');
 
 
-var AngularControllerGenerator = module.exports = function AngularControllerGenerator() {
+var angularControllerGenerator = module.exports = function angularControllerGenerator() {
     _eGeneratorBase.apply(this, arguments);
     _eLoadMdf.apply(this, [{
         project: false,
@@ -28,79 +27,94 @@ var AngularControllerGenerator = module.exports = function AngularControllerGene
     _eConfig.apply(this);
 };
 
-util.inherits(AngularControllerGenerator, _eGeneratorBase);
+util.inherits(angularControllerGenerator, _eGeneratorBase);
+
+// Pre-cleanup downloadDir
+angularControllerGenerator.prototype.preCleanup = _eCleanup;
 
 /** Download the source files */
-AngularControllerGenerator.prototype.generateSrc = function generateSrc() {
+angularControllerGenerator.prototype.generateSrc = function generateSrc() {
     _eDownloadSource.apply(this, [{
         _eMkDirs: _eMkDirs,
         generator: 'angularController'
     }]);
 };
 
-/** Create the Angular application directory structure */
-AngularControllerGenerator.prototype.angularDirs = function angularDirs() {
-    var appNameLp    = this.mdf.app.name.lowerPlural,
-        moduleNameLp = this.mdf.module.name.lowerPlural;
-
-    // Relative project paths
-    var projectAngularApp = 'client/' + appNameLp + '/',
-        projectModuleControllers = projectAngularApp + 'js/controllers/' + moduleNameLp + '/';
-
-    // TODO: Create production ready tests.
-    var testRoot = 'test/angular/' + appNameLp + '/controllers/' + moduleNameLp + '/';
-
-    _eMkDirs.apply(this, [[
-        projectModuleControllers,
-        testRoot
-    ]]);
+/** Create the directory structure */
+angularControllerGenerator.prototype.createDirs = function createDirs() {
+    // TODO: CREATE A DIRECTORY STRUCTURE FOR TESTS ONE THE MONGOOSE MODEL
+    //var _apiTest = 'test/api/' + this.mdf.module.name.lowerPlural + '-api';
+    //this.mkdir('test/angular/models/');
 };
 
-/** Create the Angular files - Controller(s) */
-AngularControllerGenerator.prototype.angularAppFiles = function angularAppFiles() {
-    var appNameLp    = this.mdf.app.name.lowerPlural,
-        moduleNameLp = this.mdf.module.name.lowerPlural;
+/** Create the Express controller(s) */
+angularControllerGenerator.prototype.createController = function createController() {
+    var filename = this.mdf.project.angular.controllers.filename,
+        extension = '.' + this.mdf.project.angular.controllers.extension;
 
-    // Generator template base directory
-//    var genBase = this._eDir.download.src + 'client/';
+    var genControllersPath = this._eDir.download.src +
+                             'client/' + this.mdf.app.angular.directory +
+                             '/js/controllers/' + this.mdf.module.path + '/';
 
-    // Directory of the template used by the application defined in the MDF
-//    var genTemplate      = genBase + this.mdf.module.angular.template + '/',
-//        genAngularModule = genTemplate + 'angular/',
-//        genJs            = genAngularModule + 'js/',
-//        genControllers   = genJs + 'controllers/';
+    var genCreateCtrlFile  = genControllersPath + filename.create  + extension,
+        genReadOneCtrlFile = genControllersPath + filename.readOne + extension,
+        genReadAllCtrlFile = genControllersPath + filename.readAll + extension,
+        genUpdateCtrlFile  = genControllersPath + filename.update  + extension,
+        genDeleteCtrlFile  = genControllersPath + filename.delete  + extension;
+//        genGetItemCtrlFile = genControllersPath + filename.getItem  + extension;
 
-//    genControllers = this._eDir.download.src + 'client/';
-    var genAngularApp    = this._eDir.download.src + 'client/' + appNameLp + '/',
-        genJs            = genAngularApp + 'js/',
-        genControllers   = genJs + 'controllers/' + moduleNameLp + '/';
+    var projectControllersPath = this._eDir.project.client +
+                                 this.mdf.app.angular.directory +
+                                 '/js/controllers/' + this.mdf.module.path + '/';
 
-    // Relative project paths
-    var projectAngularApp    = this._eDir.project.client + appNameLp + '/',
-        projectJs            = projectAngularApp + 'js/',
-        projectControllers   = projectJs + 'controllers/' + moduleNameLp + '/';
+    var projectCreateCtrlFile  = projectControllersPath + filename.create  + extension,
+        projectReadOneCtrlFile = projectControllersPath + filename.readOne + extension,
+        projectReadAllCtrlFile = projectControllersPath + filename.readAll + extension,
+        projectUpdateCtrlFile  = projectControllersPath + filename.update  + extension,
+        projectDeleteCtrlFile  = projectControllersPath + filename.delete  + extension;
+//        projectGetItemCtrlFile = projectControllersPath + filename.getItem + extension;
 
-    // HTML
-    //this.template(genAngularSkel + 'index.html', projectAngularApp + 'index.html');
+    // Path to .js files on disk that will be injected into the index.html file.
+    // All paths are relative to the base href. Controllers is an array of
+    // controllers that will be injected into the index.html file.
+    var controllerJsDir = 'controllers/' + this.mdf.module.path + '/',
+        controllers = [];
 
-    // Controllers
-    this.template(genControllers + 'create-ctrl.js',   projectControllers + 'create-ctrl.js');
-    this.template(genControllers + 'read-all-ctrl.js', projectControllers + 'read-all-ctrl.js');
-    this.template(genControllers + 'read-one-ctrl.js', projectControllers + 'read-one-ctrl.js');
+    if (this.mdf.module.angular.create.use) {
+        // Inject a reference to the controller in the index.html file.
+        controllers.push(controllerJsDir + 'create-ctrl');
+        this.copy(genCreateCtrlFile, projectCreateCtrlFile);
+    }
 
-    // Insert references to each controller in the index.html file.
-    // The 'js/' prefix to each path and the '.js' file extension are
-    // automatically added by the inject method.
+    if (this.mdf.module.angular.readAll.use) {
+        controllers.push(controllerJsDir + 'read-all-ctrl');
+        this.copy(genReadAllCtrlFile, projectReadAllCtrlFile);
+    }
 
-    var controllerJsDir = 'controllers/' + moduleNameLp + '/';
-    var controllers = [
-        controllerJsDir + 'create-ctrl',
-        controllerJsDir + 'read-all-ctrl',
-        controllerJsDir + 'read-one-ctrl'
-    ];
+    if (this.mdf.module.angular.readOne.use) {
+        controllers.push(controllerJsDir + 'read-one-ctrl');
+        this.copy(genReadOneCtrlFile, projectReadOneCtrlFile);
+    }
+
+    if (this.mdf.module.angular.update.use) {
+        controllers.push(controllerJsDir + 'update-ctrl');
+        this.copy(genUpdateCtrlFile, projectUpdateCtrlFile);
+    }
+
+    // Delete is not a separate controller in Angular b/c a simple click event
+    // is handled by the Read One Controller which then send the delete request
+    // to the API. There is no separate URL / post like with Express.
+//    if (this.mdf.module.angular.delete.use) {
+//        this.copy(genDeleteCtrlFile, projectDeleteCtrlFile);
+//    }
+
+//    if (this.mdf.module.angular.update.use || this.mdf.module.angular.delete.use) {
+//        this.copy(genGetItemCtrlFile, projectGetItemCtrlFile);
+//    }
 
     // urlBase
-    var indexHtml = this._eDir.project.client + appNameLp + '/index.html';
+    var indexHtml = this._eDir.project.client +
+                    this.mdf.app.angular.directory + '/index.html';
     controllers.forEach(function(controllerJs) {
         _eInject({
             targetFile: indexHtml,
@@ -111,42 +125,7 @@ AngularControllerGenerator.prototype.angularAppFiles = function angularAppFiles(
             appendComma: false
         });
     });
-
-
-
-
-    // Directives
-    //this.copy(genDirectives + '', projectDirectives + '');
-
-    // Filters
-    //this.copy(genFilters + '', projectFilters + '');
-
-    // Models
-    //this.copy(genModels + '', projectModels + '');
-
-    // Routers
-    //this.template(genRouters + 'accounts.js', projectRouters + 'accounts.js');
-
-    // Services
-    //this.template(genServices + 'accounts/accounts-srv.js', projectServices + 'accounts/accounts-srv.js');
-
-    // Views
-    //this.copy(genViews + '', projectViews + '');
-//    this.template(genViewsAccounts + 'login.html',  projectViewsAccounts + 'login.html');
-//    this.template(genViewsAccounts + 'signup.html', projectViewsAccounts + 'signup.html');
-//
-//    this.template(genViewsCommon + '401.html',    projectViewsCommon + '401.html');
-//    this.template(genViewsCommon + '404.html',    projectViewsCommon + '404.html');
-//    this.template(genViewsCommon + 'navbar.html', projectViewsCommon + 'navbar.html');
-//
-//    this.template(genViewsHome + 'main.html', projectViewsHome + 'main.html');
 };
 
 /** Cleanup downloadDir */
-AngularControllerGenerator.prototype.cleanupDownloadDir = function cleanupDownloadDir() {
-    rimraf(this._eDir.download.root, function(err) {
-        if (err) {
-            console.log(err);
-        }
-    });
-};
+angularControllerGenerator.prototype.cleanupDownloadDir = _eCleanup;
