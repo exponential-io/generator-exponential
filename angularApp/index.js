@@ -9,13 +9,13 @@
 
 var util            = require('util'),
     _               = require('lodash'),
-    _eInject        = require('../util/inject'),
-    _eGeneratorBase = require('../util/generator-base'),
-    _eLoadMdf       = require('../util/load-mdf'),
-    _eMkDirs        = require('../util/mkdir'),
-    rimraf           = require('rimraf'),
+    _eCleanup        = require('../util/cleanup-download-dir'),
+    _eConfig         = require('../util/config'),
     _eDownloadSource = require('../util/download-source'),
-    _eConfig         = require('../util/config');
+    _eGeneratorBase = require('../util/generator-base'),
+    _eInject        = require('../util/inject'),
+    _eLoadMdf       = require('../util/load-mdf'),
+    _eMkDirs        = require('../util/mkdir');
 
 
 var AngularAppGenerator = module.exports = function AngularAppGenerator() {
@@ -29,6 +29,9 @@ var AngularAppGenerator = module.exports = function AngularAppGenerator() {
 };
 
 util.inherits(AngularAppGenerator, _eGeneratorBase);
+
+// Pre-cleanup downloadDir
+AngularAppGenerator.prototype.preCleanup = _eCleanup;
 
 /** Generate the project skeleton files */
 AngularAppGenerator.prototype.generateApp = function generateApp() {
@@ -167,10 +170,4 @@ AngularAppGenerator.prototype.routerEntryPoint = function routerEntryPoint() {
 };
 
 /** Cleanup downloadDir */
-AngularAppGenerator.prototype.cleanupDownloadDir = function cleanupDownloadDir() {
-    rimraf(this._eDir.download.root, function(err) {
-        if (err) {
-            console.log(err);
-        }
-    });
-};
+AngularAppGenerator.prototype.cleanupDownloadDir = _eCleanup;

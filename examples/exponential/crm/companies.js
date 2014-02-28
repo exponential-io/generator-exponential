@@ -192,7 +192,7 @@ module.exports = function(_) {
     // 4. Enable and configure the read-one action
     mdf.module.angular.readOne = {
         use: true,
-        url: mdf.module.relativeUrl + '/:' + mdf.module.model.id,   // Calculated member
+        url: mdf.module.relativeUrl + '/{{' + mdf.module.model.name.lowerSingular + '._id}}',   // Calculated member
         route: mdf.module.url + '/:' + mdf.module.model.id, // Calculated member
         title: 'Company Details'                            // Default to CM
     };
@@ -200,7 +200,7 @@ module.exports = function(_) {
     // 5. Enable and configure the update action
     mdf.module.angular.update = {
         use: true,
-        url: mdf.module.relativeUrl + '/edit/:' + mdf.module.model.id,   // Calculated member
+        url: mdf.module.relativeUrl + '/edit/{{' + mdf.module.model.name.lowerSingular + '._id}}',   // Calculated member
         route: mdf.module.url + '/edit/:' + mdf.module.model.id, // Calculated member
         title: 'Update Company'                                  // Default to CM
     };

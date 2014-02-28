@@ -111,7 +111,6 @@ angularControllerNGenerator.prototype.createController = function createControll
 //    if (this.mdf.module.angular.update.use || this.mdf.module.angular.delete.use) {
 //        this.copy(genGetItemCtrlFile, projectGetItemCtrlFile);
 //    }
-};
 
     // urlBase
     var indexHtml = this._eDir.project.client +
@@ -126,6 +125,7 @@ angularControllerNGenerator.prototype.createController = function createControll
             appendComma: false
         });
     });
+};
 
 /** Cleanup downloadDir */
 angularControllerNGenerator.prototype.cleanupDownloadDir = _eCleanup;
