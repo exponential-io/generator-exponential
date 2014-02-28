@@ -31,8 +31,8 @@ module.exports = function(options) {
     // this value is ignored by the server.
     var cacheBuster = Date.now();
 
-    var host = 'http://localhost:3000',
-    //var host = 'http://www.exponential.io',
+//    var host = 'http://localhost:3000',
+    var host = 'https://www.exponential.io',
         prefix = host + '/api/v1/',
         xsrfApi             = prefix + 'xsrf-cookie?c=' + cacheBuster,
         loginApi            = prefix + 'login?c=' + cacheBuster,
