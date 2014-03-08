@@ -34,10 +34,11 @@ var Config = module.exports = function Config() {
                 chalk.blue('Exponential:'),
                 'An error occurred when reading the config file.'
             );
-            console.log('err: ' + err);
+            //console.log('err: ' + err);
             console.log('');
             console.log('Please run the following command to fix your config file:');
             console.log(chalk.green('exponential --config'));
+            return process.exit(1);
         }
 
         // If there are no errors, then we'll simply read the config file and
