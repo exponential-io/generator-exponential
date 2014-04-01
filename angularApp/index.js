@@ -44,7 +44,7 @@ AngularAppGenerator.prototype.generateApp = function generateApp() {
 /** Create the Angular application directory structure */
 AngularAppGenerator.prototype.angularDirs = function angularDirs() {
     // Relative project paths
-    var projectAngularApp = 'client/' + this.mdf.app.name.lowerPlural + '/';
+    var projectAngularApp = 'client/' + this.mdf.app.angular.directory + '/';
 
     _eMkDirs.apply(this, [[
         projectAngularApp,
@@ -65,7 +65,7 @@ AngularAppGenerator.prototype.angularDirs = function angularDirs() {
 
     // TODO: Create production ready tests.
     _eMkDirs.apply(this, [[
-        'test/angular/' + this.mdf.app.name.lowerPlural
+        'test/angular/' + this.mdf.app.angular.directory
     ]]);
 };
 
@@ -74,7 +74,7 @@ AngularAppGenerator.prototype.angularAppFiles = function angularAppFiles() {
     // Generator directory structure: angular-skel
     var genAngularSkel   = this._eDir.download.src +
             'client/' +
-            this.mdf.app.name.lowerPlural +
+            this.mdf.app.angular.directory +
             '/',
         genCss           = genAngularSkel + 'css/',
         genImg           = genAngularSkel + 'img/',
@@ -91,7 +91,7 @@ AngularAppGenerator.prototype.angularAppFiles = function angularAppFiles() {
         genViewsHome     = genAngularSkel + 'views/home/';
 
     // Relative project paths
-    var projectAngularApp    = this._eDir.project.client + this.mdf.app.name.lowerPlural + '/',
+    var projectAngularApp    = this._eDir.project.client + this.mdf.app.angular.directory + '/',
         projectCss           = projectAngularApp + 'css/',
         projectImg           = projectAngularApp + 'img/',
         projectJs            = projectAngularApp + 'js/',
